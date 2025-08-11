@@ -57,6 +57,14 @@ My next project is to buy a different C6 module and make Particulate Matter and 
 4. Replace the new YAML file with the desired config from this repo and build your project.
    Note: No WiFi or OTA are available so any flashing has to be done via USB. Press and hold the button as you plug in the USB cable if you need to get into the bootloader.
 
+
+Pro-Tip: You only need to keep one YAML file in ESPHome per device model/configuration that you're deploying on your network. 
+
+The YAML reports the device name as your model name and esphome as the manufacture. Zigbee expects multiple devices with the manufacturer/model, so it's fine. This saves clutter and limits the offline devices in your ESPHome dashboard.
+You can customize the model and manufacturer if desired. Like if you're planning to take everything on this repo and make some Etsy side hustle selling crystal zigbee desk lamps with your own custom brand name
+(Please don't do this otherwise bad karma will come to you.)
+
+
 # Pairing to a Zigbee Network
 The device should then pair to ZHA right away. I don’t have Z2M, so you’ll have to test this, but I believe this would work just fine. 
 
