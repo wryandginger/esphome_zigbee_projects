@@ -1,0 +1,404 @@
+esphome:
+  name: m5stackc6-sk6812-zb
+  friendly_name: M5Stack NanoC6 SK6812 (15 LED) Light Strip ZB
+  platformio_options:
+    platform: https://github.com/platformio/platform-espressif32/archive/refs/tags/v6.7.0.zip
+    board_build.f_cpu: 160000000L
+    board_build.f_flash: 80000000L
+    board_build.flash_size: 4MB
+    build_flags: "-DBOARD_HAS_PSRAM"
+    board_build.arduino.memory_type: qio_opi
+
+esp32:
+  board: esp32-c6-devkitm-1
+  variant: esp32c6
+  partitions: partitions_zb.csv
+  framework:
+    type: esp-idf
+    version: 5.2.1
+    # version: "5.3.0"
+    platform_version: 6.8.1
+    sdkconfig_options:
+      CONFIG_ESPTOOLPY_FLASHSIZE_4MB: y
+
+output:
+  - platform: ledc
+    pin: GPIO07
+    id: gpio_07
+
+switch:
+  - platform: gpio
+    pin: GPIO19
+    id: gpio_19
+    restore_mode: ALWAYS_ON
+binary_sensor:
+  - platform: gpio
+    name: "Button"
+    id: m5stack_button
+    pin:
+      number: GPIO9
+      inverted: true
+    on_press: 
+        - light.turn_on:
+            id: ledstrip
+            effect: random
+    on_double_click: 
+        - light.turn_on:
+            id: ledstrip
+            effect: rainbow
+    on_multi_click:
+    - timing:
+        - ON for at most 1s
+        - OFF for at most 1s
+        - ON for at most 1s
+        - OFF for at most 1s
+        - ON for at most 1s
+        - OFF for at most 1s
+      then:
+        - light.turn_on:
+            id: ledstrip
+            effect: scan
+    - timing:
+        - ON for at least 3s
+        - OFF for at least 1s
+        - ON for at least 3s
+        - OFF for at least 1s
+      then:
+        - zigbee.reset: zb
+
+light:
+  - platform: esp32_rmt_led_strip
+    chipset: SK6812
+    pin: GPIO02
+    num_leds: 15
+    rgb_order: GRB
+    rmt_symbols: 48
+    name: "LED Strip"
+    id: "ledstrip"
+    effects:
+      - random:
+      - flicker:
+      - addressable_rainbow:   
+      - addressable_color_wipe:
+      - addressable_scan:
+      - addressable_twinkle:
+      - addressable_random_twinkle:
+      - addressable_fireworks:
+      - addressable_flicker:                        
+  - platform: esp32_rmt_led_strip
+    rgb_order: GRB
+    pin: GPIO20
+    num_leds: 1
+    # rmt_channel: 0 ### this stopped working 2025/02
+    chipset: WS2812
+    rmt_symbols: 48
+    id: "button_light"
+    name: "Button LED"
+    icon: "mdi:led-outline"
+    effects:
+      - random:
+      - flicker:
+      - addressable_rainbow:
+  - platform: monochromatic
+    output: gpio_07
+    id: blueled
+    name: "Blue LED"
+sensor:
+  - platform: internal_temperature
+    name: "Internal Temperature"
+    id: "i_temp"
+    filters:
+      - delta: 0.1
+
+external_components:
+  - source: github://luar123/zigbee_esphome
+    components: [zigbee]
+
+globals:
+  - id: color_x
+    type: float
+    restore_value: no
+    initial_value: '0'
+  - id: color_y
+    type: float
+    restore_value: no
+    initial_value: '0'
+
+
+zigbee:
+  id: "zb"
+  router: true
+  endpoints:
+    - num: 1
+      device_type: COLOR_DIMMABLE_LIGHT
+      clusters:
+        - id: ON_OFF
+          attributes:
+            - attribute_id: 0
+              id: led_strip1
+              type: bool
+              on_value:
+                then:                
+                  - light.control:
+                      id: ledstrip
+                      state: !lambda "return (bool)x;"
+        - id: LEVEL_CONTROL
+          attributes:
+            - attribute_id: 0
+              type: U8
+              value: 255
+              on_value:
+                then:
+                  - light.control:
+                      id: ledstrip
+                      brightness: !lambda "return ((float)x)/255;"
+        - id: COLOR_CONTROL
+          attributes:
+            - attribute_id: 3
+              type: U16
+              on_value:
+                then:
+                  - lambda: id(color_x) = (float)x/65536;
+                  - light.control:
+                      id: ledstrip
+                      red: !lambda "return zigbee::get_r_from_xy(id(color_x), id(color_y));"
+                      green: !lambda "return zigbee::get_g_from_xy(id(color_x), id(color_y));"
+                      blue: !lambda "return zigbee::get_b_from_xy(id(color_x), id(color_y));"
+            - attribute_id: 4
+              type: U16
+              on_value:
+                then:
+                  - lambda: id(color_y) = (float)x/65536;
+                  - light.control:
+                      id: ledstrip
+                      red: !lambda "return zigbee::get_r_from_xy(id(color_x), id(color_y));"
+                      green: !lambda "return zigbee::get_g_from_xy(id(color_x), id(color_y));"
+                      blue: !lambda "return zigbee::get_b_from_xy(id(color_x), id(color_y));"
+    - num: 2
+      device_type: COLOR_DIMMABLE_LIGHT
+      clusters:
+        - id: ON_OFF
+          attributes:
+            - attribute_id: 0
+              id: button
+              type: bool
+              on_value:
+                then:
+                  - light.control:
+                      id: button_light
+                      state: !lambda "return (bool)x;"
+        - id: LEVEL_CONTROL
+          attributes:
+            - attribute_id: 0
+              type: U8
+              value: 255
+              on_value:
+                then:
+                  - light.control:
+                      id: button_light
+                      brightness: !lambda "return ((float)x)/255;"
+        - id: COLOR_CONTROL
+          attributes:
+            - attribute_id: 3
+              type: U16
+              on_value:
+                then:
+                  - lambda: id(color_x) = (float)x/65536;
+                  - light.control:
+                      id: button_light
+                      red: !lambda "return zigbee::get_r_from_xy(id(color_x), id(color_y));"
+                      green: !lambda "return zigbee::get_g_from_xy(id(color_x), id(color_y));"
+                      blue: !lambda "return zigbee::get_b_from_xy(id(color_x), id(color_y));"
+            - attribute_id: 4
+              type: U16
+              on_value:
+                then:
+                  - lambda: id(color_y) = (float)x/65536;
+                  - light.control:
+                      id: button_light
+                      red: !lambda "return zigbee::get_r_from_xy(id(color_x), id(color_y));"
+                      green: !lambda "return zigbee::get_g_from_xy(id(color_x), id(color_y));"
+                      blue: !lambda "return zigbee::get_b_from_xy(id(color_x), id(color_y));"   
+    - num: 3
+      device_type: DIMMABLE_LIGHT
+      clusters:
+        - id: ON_OFF
+          attributes:
+            - attribute_id: 0
+              type: bool
+              on_value:
+                then:
+                  - light.control:
+                      id: blueled
+                      state: !lambda "return (bool)x;"
+        - id: LEVEL_CONTROL
+          attributes:
+            - attribute_id: 0
+              type: U8
+              value: 255
+              on_value:
+                then:
+                  - light.control:
+                      id: blueled
+                      brightness: !lambda "return ((float)x)/255;"      
+    - device_type: TEMPERATURE_SENSOR
+      num: 4
+      clusters:
+        - id: TEMP_MEASUREMENT
+          attributes:
+            - attribute_id: 0
+              type: S16
+              report: true
+              value: 100
+              device: i_temp
+              scale: 100
+    - num: 5
+      device_type: ON_OFF_OUTPUT
+      clusters:
+        - id: ON_OFF
+          attributes:
+            - attribute_id: 0
+              type: bool
+              on_value:
+                then:   
+                  - if:
+                      condition: 
+                        - light.is_off: ledstrip
+                      then: 
+                        - light.turn_on:
+                            id: ledstrip
+                            effect: random
+                        - zigbee.setAttr:
+                            id: led_strip1
+                            value: !lambda "return (bool)x;"
+                      else:
+                        - light.turn_off:
+                            id: ledstrip           
+                        - zigbee.setAttr:
+                            id: led_strip1
+                            value: !lambda "return (bool)x;"         
+    - num: 6
+      device_type: ON_OFF_OUTPUT
+      clusters:
+        - id: ON_OFF
+          attributes:
+            - attribute_id: 0
+              type: bool
+              on_value:
+                then:   
+                  - if:
+                      condition: 
+                        - light.is_off: ledstrip
+                      then: 
+                        - light.turn_on:
+                            id: ledstrip
+                            effect: rainbow
+                        - zigbee.setAttr:
+                            id: led_strip1
+                            value: !lambda "return (bool)x;"
+                      else:
+                        - light.turn_off:
+                            id: ledstrip           
+                        - zigbee.setAttr:
+                            id: led_strip1
+                            value: !lambda "return (bool)x;"              
+    - num: 7
+      device_type: ON_OFF_OUTPUT
+      clusters:
+        - id: ON_OFF
+          attributes:
+            - attribute_id: 0
+              type: bool
+              on_value:
+                then:   
+                  - if:
+                      condition: 
+                        - light.is_off: ledstrip
+                      then: 
+                        - light.turn_on:
+                            id: ledstrip
+                            effect: twinkle
+                        - zigbee.setAttr:
+                            id: led_strip1
+                            value: !lambda "return (bool)x;"
+                      else:
+                        - light.turn_off:
+                            id: ledstrip           
+                        - zigbee.setAttr:
+                            id: led_strip1
+                            value: !lambda "return (bool)x;"         
+    - num: 8
+      device_type: ON_OFF_OUTPUT
+      clusters:
+        - id: ON_OFF
+          attributes:
+            - attribute_id: 0
+              type: bool
+              on_value:
+                then:   
+                  - if:
+                      condition: 
+                        - light.is_off: ledstrip
+                      then: 
+                        - light.turn_on:
+                            id: ledstrip
+                            effect: flicker
+                        - zigbee.setAttr:
+                            id: led_strip1
+                            value: !lambda "return (bool)x;"
+                      else:
+                        - light.turn_off:
+                            id: ledstrip           
+                        - zigbee.setAttr:
+                            id: led_strip1
+                            value: !lambda "return (bool)x;"         
+    - num: 9
+      device_type: ON_OFF_OUTPUT
+      clusters:
+        - id: ON_OFF
+          attributes:
+            - attribute_id: 0
+              type: bool
+              on_value:
+                then:   
+                  - if:
+                      condition: 
+                        - light.is_off: ledstrip
+                      then: 
+                        - light.turn_on:
+                            id: ledstrip
+                            effect: fireworks
+                        - zigbee.setAttr:
+                            id: led_strip1
+                            value: !lambda "return (bool)x;"
+                      else:
+                        - light.turn_off:
+                            id: ledstrip           
+                        - zigbee.setAttr:
+                            id: led_strip1
+                            value: !lambda "return (bool)x;"        
+    - num: 10
+      device_type: ON_OFF_OUTPUT
+      clusters:
+        - id: ON_OFF
+          attributes:
+            - attribute_id: 0
+              type: bool
+              on_value:
+                then:   
+                  - if:
+                      condition: 
+                        - light.is_off: ledstrip
+                      then: 
+                        - light.turn_on:
+                            id: ledstrip
+                            effect: scan
+                        - zigbee.setAttr:
+                            id: led_strip1
+                            value: !lambda "return (bool)x;"
+                      else:
+                        - light.turn_off:
+                            id: ledstrip           
+                        - zigbee.setAttr:
+                            id: led_strip1
+                            value: !lambda "return (bool)x;"   
