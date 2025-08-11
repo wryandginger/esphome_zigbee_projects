@@ -27,7 +27,7 @@ I also created a 3D printable cylander lamp that snugly fits the NanoC6 module a
 
 * [(Mouser) M5NanoC6](https://www.mouser.com/ProductDetail/M5Stack/C125?qs=jRuttqqUwMQ%2FdHvdW%2FFIaw%3D%3D) ~$6 before tax, shipping, and tariffs of about 50 cents.
   
-* [(Amazon) BTF-LIGHTING RGB IC WS2812B USB Lights (https://www.amazon.com/dp/B0CCVPLZ1R) ~$12 before tax and shipping. Currently not on sale, but any WS2812B string will work. This config is for a 66 LED 16ft string. 
+* [(Amazon) BTF-LIGHTING RGB IC WS2812B USB Lights](https://www.amazon.com/dp/B0CCVPLZ1R) ~$12 before tax and shipping. Currently not on sale, but any WS2812B string will work. This config is for a 66 LED 30ft string. 
 
 * [(Mouser) M5Stack Grove Cable](https://www.mouser.com/ProductDetail/M5Stack/A034-D?qs=81r%252BiQLm7BQIX3ZPS9TpAA%3D%3D)  ~$2 before tax, shipping, and tariffs of about 25 cents.
 
