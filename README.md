@@ -1,4 +1,4 @@
-# esphome_zigbee - Zigbee ESPHome Projects
+# Zigbee ESPHome Projects
 
 This Repo Contains ESPHome YAML configurations and other files that might be useful in building Zigbee devices using ESPHome 2025.7.5 (and newer, probably?)
 
