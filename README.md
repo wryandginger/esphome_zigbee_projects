@@ -17,7 +17,12 @@ Note: Prices as of Aug 2025 and may vary. I recommend buying a bunch of modules 
 
 * [(Mouser) M5Stack Grove Cable](https://www.mouser.com/ProductDetail/M5Stack/A034-D?qs=81r%252BiQLm7BQIX3ZPS9TpAA%3D%3D)  ~$2 before tax, shipping, and tariffs of about 25 cents.
 
-I also created a 3D printable cylander lamp that snugly fits the NanoC6 module and the LED 
+# sk6812-lamp.stl - This is a 3D Model (STL) of a lamp to use with the SK6812 (15 LED) config. 
+
+* This is a 3D printable cylander lamp that snugly fits the NanoC6 module and the LED.
+* Print using clear/transparent PLA at 5% infill and use Archimedes screw as your infill pattern for optimal light diffusion.
+* Print time: 90 minutes on a FlashForge Adventurer 5MPro and sliced with OrcaSlicer.
+* You can literally place this upside down, sideways, right side up, whatever you think looks best. Use the open channel in the back to tuck your cords out of view. 
 
 
 
