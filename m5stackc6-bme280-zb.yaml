@@ -21,19 +21,6 @@ esp32:
     sdkconfig_options:
       CONFIG_ESPTOOLPY_FLASHSIZE_4MB: y
 
-# Enable logging
-logger:
-
-# Enable Home Assistant API
-api:
-
-ota:
-  - platform: esphome
-
-wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
-
 i2c:
   sda: GPIO2
   scl: GPIO1
@@ -83,9 +70,6 @@ switch:
     name: "RGB on/off"
 
 sensor:
-  - platform: wifi_signal
-    name: "WiFi Signal"
-    update_interval: 60s
   - platform: internal_temperature
     name: "Internal Temperature"
     id: "i_temp"
@@ -205,7 +189,3 @@ zigbee:
               value: 100
               device: i_temp
               scale: 100
-
-  on_join:
-    then:
-      - logger.log: "Joined network"
