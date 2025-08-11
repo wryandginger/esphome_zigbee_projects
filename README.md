@@ -68,14 +68,14 @@ For the LED yaml files the code exposes:
 * NanoC6 button as an RGB Bulb
 * The blue LED as a standard ON/OFF bulb.
 * 6 on/off switches that activate RGBIC lighting effects.
-* The internal module temperature as a sensor
+* The internal module temperature as a sensor (I'm using this to monitor that they're not overheating or catching fire, etc.)
 * These can all be controlled via ZHA as any other LED devices.
 
 The Nano C6 Button does the following:
 
-* One click: Hue-style color loop
-* Double-click: RGBIC rainbow effect on the strip and button
-* Triple-click: RGBIC chase effect on the strip and rainbow for the button
+* One click: Hue-style color loop for the LED strip
+* Double-click: RGBIC rainbow effect on the LED strip
+* Triple-click: RGBIC chase effect on the LED strip
 
 To Reset/Set to Pairing (Only needed if you fiddle with the code a bunch):
 
