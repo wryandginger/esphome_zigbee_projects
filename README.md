@@ -6,7 +6,7 @@ This is made possible by the hard work of @luar123  for the zigbee_esphome exter
 
 A lot of the code is based on examples in the github repo, but I was having some issues getting started and a lot was discovered by trial and error. I'd like to save you some time and frustration.
 
-Note: Prices as of Aug 2025 and may vary. I recommend buying a bunch of modules from Mouser to make the shipping costs worth it. You can buy the C6 module from Amazon, but you'll pay triple. 
+Note: Prices listed are as of Aug 2025 and may vary in your time/space/dimension. I recommend buying a bunch of modules from Mouser to make the shipping costs worth it. You can buy the C6 module from Amazon, but you'll pay triple. 
 
 
 # For m5stackc6-sk6812-zb.yaml:
