@@ -1,0 +1,211 @@
+esphome:
+  name: m5stackc6-bme280-zb
+  friendly_name: M5Stack NanoC6 BME280 THP Sensor ZB
+  platformio_options:
+    platform: https://github.com/platformio/platform-espressif32/archive/refs/tags/v6.7.0.zip
+    board_build.f_cpu: 160000000L
+    board_build.f_flash: 80000000L
+    board_build.flash_size: 4MB
+    build_flags: "-DBOARD_HAS_PSRAM"
+    board_build.arduino.memory_type: qio_opi
+
+esp32:
+  board: esp32-c6-devkitm-1
+  variant: esp32c6
+  partitions: partitions_zb.csv
+  framework:
+    type: esp-idf
+    version: 5.2.1
+    # version: "5.3.0"
+    platform_version: 6.8.1
+    sdkconfig_options:
+      CONFIG_ESPTOOLPY_FLASHSIZE_4MB: y
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+  - platform: esphome
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+i2c:
+  sda: GPIO2
+  scl: GPIO1
+  scan: true
+  id: bus_a
+
+binary_sensor:
+  - platform: gpio
+    name: "Button"
+    id: m5stack_button
+    pin:
+      number: GPIO9
+      inverted: true
+
+light:
+  - platform: esp32_rmt_led_strip
+    rgb_order: GRB
+    pin: GPIO20
+    num_leds: 1
+    # rmt_channel: 0 ### this stopped working 2025/02
+    chipset: WS2812
+    is_rgbw: true
+    id: light_1
+    name: "Light"
+    icon: "mdi:led-outline"
+    effects:
+      - random:
+      - flicker:
+      - addressable_rainbow:
+
+switch:
+  - platform: factory_reset
+    name: "Restart with Factory Default Settings"
+    entity_category: "diagnostic"
+
+  - platform: restart
+    name: "Restart"
+
+  - platform: gpio
+    pin: GPIO7
+    id: blue_led
+    name: "Blue LED"
+
+  - platform: gpio
+    pin: GPIO19
+    id: rgb_pwr
+    name: "RGB on/off"
+
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal"
+    update_interval: 60s
+  - platform: internal_temperature
+    name: "Internal Temperature"
+    id: "i_temp"
+    filters:
+      - delta: 0.1
+  - platform: bme280_i2c
+    address: 0x76
+    temperature:
+      name: "BME280 Temperature"
+      id: temp
+    pressure:
+      name: "BME280 Pressure"
+      id: press
+    humidity:
+      name: "BME280 Humidity"
+      id: humid
+
+      
+external_components:
+  - source: github://luar123/zigbee_esphome
+    components: [zigbee]
+
+globals:
+  - id: color_x
+    type: float
+    restore_value: no
+    initial_value: '0'
+  - id: color_y
+    type: float
+    restore_value: no
+    initial_value: '0'
+
+zigbee:
+  id: "zb"
+  router: true
+  endpoints:
+    - num: 1
+      device_type: COLOR_DIMMABLE_LIGHT
+      clusters:
+        - id: ON_OFF
+          attributes:
+            - attribute_id: 0
+              type: bool
+              on_value:
+                then:
+                  - switch.turn_on: rgb_pwr
+                  - light.control:
+                      id: light_1
+                      state: !lambda "return (bool)x;"
+        - id: LEVEL_CONTROL
+          attributes:
+            - attribute_id: 0
+              type: U8
+              value: 255
+              on_value:
+                then:
+                  - light.control:
+                      id: light_1
+                      brightness: !lambda "return ((float)x)/255;"
+        - id: COLOR_CONTROL
+          attributes:
+            - attribute_id: 3
+              type: U16
+              on_value:
+                then:
+                  - lambda: id(color_x) = (float)x/65536;
+                  - light.control:
+                      id: light_1
+                      red: !lambda "return zigbee::get_r_from_xy(id(color_x), id(color_y));"
+                      green: !lambda "return zigbee::get_g_from_xy(id(color_x), id(color_y));"
+                      blue: !lambda "return zigbee::get_b_from_xy(id(color_x), id(color_y));"
+            - attribute_id: 4
+              type: U16
+              on_value:
+                then:
+                  - lambda: id(color_y) = (float)x/65536;
+                  - light.control:
+                      id: light_1
+                      red: !lambda "return zigbee::get_r_from_xy(id(color_x), id(color_y));"
+                      green: !lambda "return zigbee::get_g_from_xy(id(color_x), id(color_y));"
+                      blue: !lambda "return zigbee::get_b_from_xy(id(color_x), id(color_y));"
+    - device_type: TEMPERATURE_SENSOR
+      num: 2
+      clusters:
+        - id: TEMP_MEASUREMENT
+          attributes:
+            - attribute_id: 0
+              type: S16
+              report: true
+              value: 100
+              device: temp
+              scale: 100
+        - id: REL_HUMIDITY_MEASUREMENT
+          attributes:
+            - attribute_id: 0
+              type: U16
+              report: true
+              value: 100
+              device: humid
+              scale: 100        
+        - id: PRESSURE_MEASUREMENT
+          attributes:
+            - attribute_id: 0x0
+              type: S16
+              report: true
+              value: 0x8000
+              device: press              
+
+    - device_type: TEMPERATURE_SENSOR
+      num: 3
+      clusters:
+        - id: TEMP_MEASUREMENT
+          attributes:
+            - attribute_id: 0
+              type: S16
+              report: true
+              value: 100
+              device: i_temp
+              scale: 100
+
+  on_join:
+    then:
+      - logger.log: "Joined network"
