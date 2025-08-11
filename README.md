@@ -17,16 +17,16 @@ Note: Prices as of Aug 2025 and may vary. I recommend buying a bunch of modules 
 
 * [(Mouser) M5Stack Grove Cable](https://www.mouser.com/ProductDetail/M5Stack/A034-D?qs=81r%252BiQLm7BQIX3ZPS9TpAA%3D%3D)  ~$2 before tax, shipping, and tariffs of about 25 cents.
 
-# sk6812-lamp.stl - This is a 3D Model (STL) of a lamp to use with the SK6812 (15 LED) config. 
+# sk6812-lamp.stl - a 3D Model (STL) of a lamp to use with the SK6812 (15 LED): 
 
 * This is a 3D printable cylander lamp that snugly fits the NanoC6 module and the LED.
 * Print using clear/transparent PLA at 5% infill and use Archimedes screw as your infill pattern for optimal light diffusion.
 * Print time: 90 minutes on a FlashForge Adventurer 5MPro and sliced with OrcaSlicer.
-* You can literally place this upside down, sideways, right side up, whatever you think looks best. Use the open channel in the back to tuck your cords out of view. 
+* You can literally place this upside down, sideways, right side up, whatever you think looks best. Use the open channel in the back to tuck your cords out of view.
+* This is brighter and more visually appealing than a Philips Hue Bloom.
 
 
-
-# For m5stackc6-ws2812-zb.yaml
+# For m5stackc6-ws2812-zb.yaml:
 
 * [(Mouser) M5NanoC6](https://www.mouser.com/ProductDetail/M5Stack/C125?qs=jRuttqqUwMQ%2FdHvdW%2FFIaw%3D%3D) ~$6 before tax, shipping, and tariffs of about 50 cents.
   
@@ -34,14 +34,20 @@ Note: Prices as of Aug 2025 and may vary. I recommend buying a bunch of modules 
 
 * [(Mouser) M5Stack Grove Cable](https://www.mouser.com/ProductDetail/M5Stack/A034-D?qs=81r%252BiQLm7BQIX3ZPS9TpAA%3D%3D)  ~$2 before tax, shipping, and tariffs of about 25 cents.
 
+Because this is a waterproof LED string, you can put these in a damp location IF your module stays well protected from the elements. I'm testing this outdoors in a waterproof electrical box.
+
 
 # For m5stackc6-bme280-zb.yaml:
 
 * [(Mouser) M5NanoC6](https://www.mouser.com/ProductDetail/M5Stack/C125?qs=jRuttqqUwMQ%2FdHvdW%2FFIaw%3D%3D) ~$6 before tax, shipping, and tariffs of about 50 cents.
   
-* [(Amazon) BME280](https://www.amazon.com/Pre-Soldered-Atmospheric-Temperature-GY-BME280-3-3-MicroControllers/dp/B0BQFV883T) ~$12 before tax and shipping. (Don't buy this. I'm just using leftover parts from an older project. You should just buy a M5stack BME688 module at Mouser.)
+* [(Amazon) BME280](https://www.amazon.com/Pre-Soldered-Atmospheric-Temperature-GY-BME280-3-3-MicroControllers/dp/B0BQFV883T) ~$12 before tax and shipping.
+  (Don't buy this. I'm just using leftover parts from an older project. You should just buy a M5stack BME688 module at Mouser.)
 
 * [(Mouser) M5Stack Grove Cable](https://www.mouser.com/ProductDetail/M5Stack/A034-D?qs=81r%252BiQLm7BQIX3ZPS9TpAA%3D%3D)  ~$2 before tax, shipping, and tariffs of about 25 cents.
+
+This produces a Temperature, Humidity, and Pressure sensor. Use this for the example code, but like I said there are better sensors out there than the BME 280, I think.
+My next project is to buy a different C6 module and make Particulate Matter and CO2 sensors, stay tuned.
   
 # Install Instructions
 
