@@ -1,5 +1,4 @@
-# esphome_zigbee
-Zigbee ESPHome Projects
+# esphome_zigbee - Zigbee ESPHome Projects
 
 This Repo Contains ESPHome YAML configurations and other files that might be useful in building Zigbee devices using ESPHome 2025.7.5 (and newer, probably?)
 
@@ -9,7 +8,6 @@ A lot of the code is based on examples in the github repo, but I was having some
 
 Note: Prices as of Aug 2025 and may vary. I recommend buying a bunch of modules from Mouser to make the shipping costs worth it. You can buy the C6 module from Amazon, but you'll pay triple. 
 
-Parts used in this repo:
 
 # For m5stackc6-sk6812-zb.yaml:
 
@@ -49,7 +47,7 @@ I also created a 3D printable cylander lamp that snugly fits the NanoC6 module a
    Note: No WiFi or OTA are available so any flashing has to be done via USB. Press and hold the button as you plug in the USB cable if you need to get into the bootloader.
 
 # Pairing to a Zigbee Network
-The device should then pair to ZHA right away. I don’t have Z2M, so you’ll have to test this, but I believe this would work just fine. If you can test, please tell me if this code does or does not work on Z2M, Hue, or any other hub you might have access to.
+The device should then pair to ZHA right away. I don’t have Z2M, so you’ll have to test this, but I believe this would work just fine. 
 
 By default these YAML files configure your C6 module as a router, but you can disable that line and make this an end device, but if you're going to keep it powered all the time as a lamp making this a repeater is a good idea, I think. These work fine as repeaters, but their range isn’t great.
 
@@ -76,3 +74,6 @@ To Reset/Set to Pairing (Only needed if you fiddle with the code a bunch):
 4. Release for 1+ seconds
    
 The lights should then turn off. Unplug/Plug in the NanoC6 and you’re back in pairing mode.
+
+# Please adapt, test, and share!
+If you can test, please tell me if this code does or does not work on Z2M, Hue, or any other hub you might have access to. I'll update this repo with any new information I have as I test the stability of these as routers.
