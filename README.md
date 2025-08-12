@@ -2,7 +2,7 @@
 
 This Repo Contains ESPHome YAML configurations and other files that might be useful in building Zigbee devices using ESPHome 2025.7.5 (and newer, probably?)
 
-This is made possible by the hard work of @luar123  for the zigbee_esphome external component. (github://luar123/zigbee_esphome)
+This is made possible by the hard work of @luar123  for the [zigbee_esphome external component.](https://github.com/luar123/zigbee_esphome)
 
 A lot of the code is based on examples in the github repo, but I was having some issues getting started and a lot was discovered by trial and error. I'd like to save you some time and frustration.
 
@@ -60,9 +60,9 @@ My next project is to buy a different C6 module and make Particulate Matter and 
 
 Pro-Tip: You only need to keep one YAML file in ESPHome per device model/configuration that you're deploying on your network. 
 
-The YAML reports the device name as your model name and esphome as the manufacture. Zigbee expects multiple devices with the manufacturer/model, so it's fine. This saves clutter and limits the offline devices in your ESPHome dashboard.
-You can customize the model and manufacturer if desired. Like if you're planning to take everything on this repo and make some Etsy side hustle selling crystal zigbee desk lamps with your own custom brand name
-(Please don't do this otherwise bad karma will come to you.)
+* The YAML reports the device name as your model name and ESPhome as the manufacturer. Zigbee expects multiple devices with the manufacturer/model, so it's fine. This saves clutter and limits the offline devices in your ESPHome dashboard.
+
+* You can customize the model and manufacturer if needed desired. For example, you could try mimicking the make/model of a supported device to troubleshoot (e.g., LEDVANCE FLEX RGBW, eWeLight ZB-CL01, or Signify Netherlands B.V. LCA003). Or, if you're planning to take everything on this repo and make some Etsy side hustle selling crystal zigbee desk lamps with your own custom brand name.    (Please don't do this otherwise bad karma will come to you.)
 
 
 # Pairing to a Zigbee Network
@@ -96,3 +96,7 @@ The lights should then turn off. Unplug/Plug in the NanoC6 and you’re back in 
 
 # Please adapt, test, and share!
 If you can test, please tell me if this code does or does not work on Z2M, Hue, or any other hub you might have access to. I'll update this repo with any new information I have as I test the stability of these as routers.
+
+Confirmed NOT working:
+* eWeLink/Sonoff ZBBridge - NanoC6 fails to be discovered on versions 1.4-1.7
+  I was able to get the device to pair once, but never responded to commands.
