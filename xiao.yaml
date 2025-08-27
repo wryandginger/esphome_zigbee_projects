@@ -1,0 +1,260 @@
+esphome:
+  name: xiao-mmw-heartrate
+  friendly_name: XIAO Presence and Heart Rate Detection
+
+esp32:
+  board: esp32-c6-devkitm-1
+  variant: esp32c6
+  partitions: partitions_zb.csv
+  framework:
+    type: esp-idf
+    version: 5.3.0
+    platform_version: 6.8.1
+    sdkconfig_options:
+      CONFIG_ESPTOOLPY_FLASHSIZE_4MB: y
+
+light:
+  - platform: esp32_rmt_led_strip
+    id: led_1
+    name: "Seeed MR60BHA2 RGB Light"
+    pin: GPIO1
+    num_leds: 1
+    rgb_order: GRB
+    chipset: ws2812
+
+i2c:
+  sda: GPIO22
+  scl: GPIO23
+  scan: false
+  id: bus_a
+
+uart:
+  id: uart_bus
+  baud_rate: 115200
+  rx_pin: 17
+  tx_pin: 16
+  parity: NONE
+  stop_bits: 1
+
+seeed_mr60bha2:
+  id: my_seeed_mr60bha2
+
+binary_sensor:
+  - platform: seeed_mr60bha2
+    has_target:
+      name: "Occupancy"
+      id: sensor_occupancy
+      
+sensor:
+  - platform: bh1750
+    id: illum_id
+    name: "Illuminance"
+    address: 0x23
+    update_interval: 45s
+  - platform: seeed_mr60bha2
+    breath_rate:
+      name: "Respiratory rate"
+      id: respirate
+    heart_rate:
+      name: "Heart rate"
+      id: heart
+    distance:
+      name: "Distance to Target"
+      id: distance
+    num_targets:
+      name: "Number of People Detected"
+      id: people
+  - platform: bme280_i2c
+    address: 0x76
+    temperature:
+      name: "BME280 Temperature"
+      id: temp
+    pressure:
+      name: "BME280 Pressure"
+      id: press
+    humidity:
+      name: "BME280 Humidity"
+      id: humid
+
+external_components:
+  - source: github://luar123/zigbee_esphome
+    components: [zigbee]
+
+globals:
+  - id: color_x
+    type: float
+    restore_value: no
+    initial_value: '0'
+  - id: color_y
+    type: float
+    restore_value: no
+    initial_value: '0'
+
+zigbee:
+  id: "zb"
+  router: true
+  endpoints:
+    - device_type: SIMPLE_SENSOR
+      num: 1
+      clusters:
+        - id: OCCUPANCY_SENSING
+          attributes:
+            - id: zb_occupancy # actual state as bit. 0 -> empty; 1 -> occupied 
+              attribute_id: 0x000
+              type: 8BITMAP
+              report: true
+              value: 0
+              device: sensor_occupancy
+              lambda: !lambda "return x ? 1 : 0;" # perhaps not needed
+            - attribute_id: 0x0001
+              type: 8BIT_ENUM
+              report: true
+              value: 0x02 #0x00 -> PIR; 0x01 -> sonic; 0x02 -> PIR & sonic
+        - id: ILLUMINANCE_MEASUREMENT
+          attributes:
+            - attribute_id: 0
+              type: U16
+              report: true
+              value: 0
+              lambda: !lambda "return log10(x)*10000 + 1;"
+              device: illum_id             
+        - id:  ANALOG_INPUT
+          attributes:
+            - attribute_id: 0x001C
+              type: CHAR_STRING
+              max_length: 13
+              report: true
+              value: Total Targets
+            - attribute_id: 0x0051
+              type: bool
+              value: false
+            - attribute_id: 0x0055
+              type: single
+              device: people
+              value: 100
+              report: true
+            - attribute_id: 0x0075
+              type: 16BIT_ENUM
+              value: 95 # == count / no units
+              report: true
+            - attribute_id: 0x006F
+              type: 8BITMAP
+              value: 0
+    - num: 2
+      device_type: COLOR_DIMMABLE_LIGHT
+      clusters:
+        - id: ON_OFF
+          attributes:
+            - attribute_id: 0
+              type: bool
+              on_value:
+                then:
+                  - light.control:
+                      id: led_1
+                      state: !lambda "return (bool)x;"
+        - id: LEVEL_CONTROL
+          attributes:
+            - attribute_id: 0
+              type: U8
+              on_value:
+                then:
+                  - light.control:
+                      id: led_1
+                      brightness: !lambda "return ((float)x)/255;"    
+        - id: COLOR_CONTROL
+          attributes:
+            - attribute_id: 3
+              type: U16
+              on_value:
+                then:
+                  - lambda: id(color_x) = (float)x/65536;
+                  - light.control:
+                      id: led_1
+                      red: !lambda "return zigbee::get_r_from_xy(id(color_x), id(color_y));"
+                      green: !lambda "return zigbee::get_g_from_xy(id(color_x), id(color_y));"
+                      blue: !lambda "return zigbee::get_b_from_xy(id(color_x), id(color_y));"
+            - attribute_id: 4
+              type: U16
+              on_value:
+                then:
+                  - lambda: id(color_y) = (float)x/65536;
+                  - light.control:
+                      id: led_1
+                      red: !lambda "return zigbee::get_r_from_xy(id(color_x), id(color_y));"
+                      green: !lambda "return zigbee::get_g_from_xy(id(color_x), id(color_y));"
+                      blue: !lambda "return zigbee::get_b_from_xy(id(color_x), id(color_y));"
+    - device_type: SIMPLE_SENSOR
+      num: 3
+      clusters:
+        - id:  ANALOG_INPUT
+          attributes:
+            - attribute_id: 0x001C
+              type: CHAR_STRING
+              max_length: 10
+              report: true
+              value: Heart Rate
+            - attribute_id: 0x0051
+              type: bool
+              value: false
+            - attribute_id: 0x0055
+              type: single
+              device: heart
+              value: 100
+              report: true
+            - attribute_id: 0x0075
+              type: 16BIT_ENUM
+              value: 100 # == per minute
+              report: true
+            - attribute_id: 0x006F
+              type: 8BITMAP
+              value: 0
+    - device_type: SIMPLE_SENSOR
+      num: 4
+      clusters:
+        - id:  ANALOG_INPUT
+          attributes:
+            - attribute_id: 0x001C
+              type: CHAR_STRING
+              max_length: 11
+              report: true
+              value: Breath Rate
+            - attribute_id: 0x0051
+              type: bool
+              value: false
+            - attribute_id: 0x0055
+              type: single
+              device: respirate
+              value: 100
+              report: true
+            - attribute_id: 0x0075
+              type: 16BIT_ENUM
+              value: 100 # == per minute
+              report: true
+            - attribute_id: 0x006F
+              type: 8BITMAP
+              value: 0
+    - device_type: SIMPLE_SENSOR
+      num: 5
+      clusters:
+        - id:  ANALOG_INPUT
+          attributes:
+            - attribute_id: 0x001C
+              type: CHAR_STRING
+              max_length: 11
+              report: true
+              value: Target Dist
+            - attribute_id: 0x0051
+              type: bool
+              value: false
+            - attribute_id: 0x0055
+              type: single
+              report: true
+              value: 0
+              device: distance
+            - attribute_id: 0x0075
+              type: 16BIT_ENUM
+              value: 118 # == centemeters
+              report: true
+            - attribute_id: 0x006F
+              type: 8BITMAP
+              value: 0
