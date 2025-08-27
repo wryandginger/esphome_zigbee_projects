@@ -92,3 +92,4 @@ If you can test, please tell me if this code does or does not work on Z2M, Hue, 
 Confirmed NOT working:
 * eWeLink/Sonoff ZBBridge - NanoC6 fails to be discovered on versions 1.4-1.7
   I was able to get the device to pair once, but never responded to commands.
+* Hue - requires some special keys to be added
