@@ -2,7 +2,7 @@
 
 This Repo Contains ESPHome YAML configurations and other files that might be useful in building Zigbee devices using ESPHome 2025.7.5
 
-Note: ESPHome 2025.8.1 breaks I2C and UART using esp-idf. A fix is in the dev branch. -- Be warned, ESPHome will ALWAYS break non-standard/custom integrations on a new version.
+Note: ESPHome 2025.8.1+ breaks [I2C](https://github.com/esphome/esphome/issues/10498) and [UART using esp-idf](https://github.com/esphome/esphome/issues/10515) -- Be warned, ESPHome will ALWAYS break non-standard/custom integrations on a new version.
 
 As a rule, you should NEVER trust software updates will work as intended. Always make several backups (including yaml files, encryption keys, etc.).
 
