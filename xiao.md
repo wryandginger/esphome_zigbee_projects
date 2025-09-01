@@ -13,9 +13,10 @@ You will need
 # Install Instructions
 1. Remove the 3d printed back cover.
 2. Plug a USB-C cable into the XIAO module, not the port closest to the grove port.
-3. Go to github and download partitions_zb.csv then place in /config/esphome
-4. Prep your device in esphome. I usually just select ESP32-C6 and skip everything.
-5. Replace the new YAML file with the desired config from this repo and build your project. Note: No WiFi or OTA are available so any flashing has to be done via USB. Press and hold the button as you plug in the USB cable if you need to get into the bootloader.
+3. IMPORTANT: Download Ardunino IDE and follow the instructions [here](https://wiki.seeedstudio.com/getting_started_with_mr60bha2_mmwave_kit/#module-firmware-upgrade) to update the mmWave module firmware. Fimware <1.10 has a lot of bugs! 
+4. After your firmware is updated, go to github and download partitions_zb.csv then place in /config/esphome
+5. Prep your device in esphome. I usually just select ESP32-C6 and skip everything.
+6. Replace the new YAML file with the desired config from this repo and build your project. Note: No WiFi or OTA are available so any flashing has to be done via USB. Press and hold the button as you plug in the USB cable if you need to get into the bootloader.
 
 Pro-Tip: You only need to keep one YAML file in ESPHome per device model/configuration that you're deploying on your network.
 
