@@ -24,6 +24,19 @@ You will need
 * DuPont cables and wago connectors  (or some electrical tape)
 * Use the CO2box.stl and boxlid.stl to print a project box that hides everything neatly. (I recommend printing in Clear PLA)
 
+# panopticon-pms-bsec2.yaml and panopticon-co2-bsec2.yaml
+These files use [Bosch's proprietary BSEC2 libary](https://github.com/boschsensortec/Bosch-BSEC2-Library). These offer IAQ/Air Quality and Sensor accuracy sensors in addition to Temperature, Humidity, Motion, etc.
+The IAQ and Accuracy sensors have been slightly altered from the config examples offered by ESPHome by converting these to percentages.
+The display also shows shorter/more readable AQI interpretations plus sensor accuracy. Display is in a better layout for readability.
+
+Using/compiling these files is implicit acceptance of [Bosch's license agreement](https://www.bosch-sensortec.com/media/boschsensortec/downloads/software/bme688_development_software/2024_12/20241219_clickthrough_license_terms_bsec_bme680_bme688_bme690.pdf). ... tl;dr: 
+* Don't use this outside of consumer settings/contexts (no industrial/medical/safety-critical uses). 
+* You may sell a device with this library enabled in firmware, but you may not modify/disassemble/reverse-engineer Bosch's library.
+* Don't give/sell the config to any military or a hostle/embargoed country.
+* This is not legal advice. I am not your lawyer, nor am I your dentist.
+* Compile at your own risk.
+
+
 # Install Instructions
 1. Splice the cables for the display and the BME 680 sensor. Ground to Ground, VCC to VCC, SDA to SDA, SCL to SCL
 2. Splice the VCC/Power cable to the LD2410 and the PMS or CO2 sensor
@@ -34,11 +47,6 @@ You will need
 5. Go to github and download partitions_zb.csv then place in /config/esphome
 6. Prep your device in esphome. I usually just select ESP32-C6 and skip everything.
 7. Replace the new YAML file with the desired config from this repo and build your project. Note: No WiFi or OTA are available so any flashing has to be done via USB. Press and hold the button as you plug in the USB cable if you need to get into the bootloader.
-
-# panopticon-pms-bsec2.yaml and panopticon-co2-bsec2.yaml
-These files use Bosch's proprietary BSEC2 libary. These offer IAQ/Air Quality and Sensor accuracy sensors in addition to Temperature, Humidity, Motion, etc.
-The IAQ and Accuracy sensors have been slightly altered from the config examples offered by ESPHome by converting these to percentages.
-The display also shows shorter/more readable AQI interpretations plus sensor accuracy. Display is in a better layout for readability.
 
 Pro-Tip: You only need to keep one YAML file in ESPHome per device model/configuration that you're deploying on your network.
 
