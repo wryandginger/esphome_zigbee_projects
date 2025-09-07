@@ -4,7 +4,7 @@ These are projects that use the larger ESP32-C6 Dev Kit to make multi sensors.
 Note: This will work on ZHA, but is not working on Z2M without writing your own handler.
 This is also confirmed to NOT work with Hue, Sonoff, and Tuya gateways.
 
-# For pms.yaml:
+# For pms.yaml panopticon-pms-bsec2.yaml:
 You will need
 * [ESP32-C6 Dev Kit](https://www.amazon.com/Waveshare-Microcontroller-Development-Single-Core-ESP32-C6-WROOM-1-N8/dp/B0CKR2LF83/) ~$11
 * [HLK-LD2410-B 20GhZ mmWave Sensor with cable] (https://www.amazon.com/JESSINIE-HLK-LD2410B-P-Presence-Bluetooth-LD2410B/dp/B0C36FRVHR) ~$11
@@ -14,7 +14,7 @@ You will need
 * DuPont cables and wago connectors  (or some electrical tape)
 * Use the PMSbox.stl and boxlid.stl to print a project box that hides everything neatly. (I recommend printing in Clear PLA)
 
-# For co2.yaml:
+# For co2.yaml and panopticon-co2-bsec2.yaml:
 You will need
 * [ESP32-C6 Dev Kit](https://www.amazon.com/Waveshare-Microcontroller-Development-Single-Core-ESP32-C6-WROOM-1-N8/dp/B0CKR2LF83/) ~$11
 * [HLK-LD2410-B 20GhZ mmWave Sensor with cable] (https://www.amazon.com/JESSINIE-HLK-LD2410B-P-Presence-Bluetooth-LD2410B/dp/B0C36FRVHR) ~$11
@@ -34,6 +34,11 @@ You will need
 5. Go to github and download partitions_zb.csv then place in /config/esphome
 6. Prep your device in esphome. I usually just select ESP32-C6 and skip everything.
 7. Replace the new YAML file with the desired config from this repo and build your project. Note: No WiFi or OTA are available so any flashing has to be done via USB. Press and hold the button as you plug in the USB cable if you need to get into the bootloader.
+
+# panopticon-pms-bsec2.yaml and panopticon-co2-bsec2.yaml
+These files use Bosch's proprietary BSEC2 libary. These offer IAQ/Air Quality and Sensor accuracy sensors in addition to Temperature, Humidity, Motion, etc.
+The IAQ and Accuracy sensors have been slightly altered from the config examples offered by ESPHome by converting these to percentages.
+The display also shows shorter/more readable AQI interpretations plus sensor accuracy. Display is in a better layout for readability.
 
 Pro-Tip: You only need to keep one YAML file in ESPHome per device model/configuration that you're deploying on your network.
 
