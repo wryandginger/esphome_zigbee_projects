@@ -201,6 +201,7 @@ zigbee:
               report: true
               value: 0
               device: ldlux
+              lambda: !lambda "return log10(x)*10000 + 1;"
         - id: PM2_5_MEASUREMENT
           attributes:
             - attribute_id: 0x0
