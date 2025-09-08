@@ -1,7 +1,7 @@
 # Zigbee ESPHome Projects for the M5Stack NanoC6
 
 
-# For m5stackc6-sk6812-zb.yaml:
+# For [m5stackc6-sk6812-zb.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/m5stackc6-sk6812-zb.yaml):
 
 * [(Mouser) M5NanoC6](https://www.mouser.com/ProductDetail/M5Stack/C125?qs=jRuttqqUwMQ%2FdHvdW%2FFIaw%3D%3D) ~$6 before tax, shipping, and tariffs of about 50 cents.
 
@@ -9,7 +9,7 @@
 
 * [(Mouser) M5Stack Grove Cable](https://www.mouser.com/ProductDetail/M5Stack/A034-D?qs=81r%252BiQLm7BQIX3ZPS9TpAA%3D%3D)  ~$2 before tax, shipping, and tariffs of about 25 cents.
 
-# sk6812-lamp.stl - a 3D Model (STL) of a lamp to use with the SK6812 (15 LED): 
+# [sk6812-lamp.stl](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/[sk6812-lamp.stl) - a 3D Model (STL) of a lamp to use with the SK6812 (15 LED): 
 
 * This is a 3D printable cylander lamp that snugly fits the NanoC6 module and the LED.
 * Print using clear/transparent PLA at 5% infill and use Archimedes screw as your infill pattern for optimal light diffusion.
@@ -18,18 +18,18 @@
 * This is brighter and more visually appealing than a Philips Hue Bloom.
 
 
-# For m5stackc6-ws2812-zb.yaml:
+# For [m5stackc6-ws2812-zb.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/m5stackc6-ws2812-zb.yaml):
 
 * [(Mouser) M5NanoC6](https://www.mouser.com/ProductDetail/M5Stack/C125?qs=jRuttqqUwMQ%2FdHvdW%2FFIaw%3D%3D) ~$6 before tax, shipping, and tariffs of about 50 cents.
   
 * [(Amazon) BTF-LIGHTING RGB IC WS2812B USB Lights](https://www.amazon.com/dp/B0CCVPLZ1R) ~$12 before tax and shipping. Currently not on sale, but any WS2812B string will work. This config is for a 66 LED 30ft string. 
 
-* [(Mouser) M5Stack Grove Cable](https://www.mouser.com/ProductDetail/M5Stack/A034-D?qs=81r%252BiQLm7BQIX3ZPS9TpAA%3D%3D)  ~$2 before tax, shipping, and tariffs of about 25 cents.
+* [(Mouser) M5Stack Grove Cable](https://www.mouser.com/ProductDetail/M5Stack/A034-D?qs=81r%252BiQLm7BQIX3ZPS9TpAA%3D%3D)  ~$2 before tax, shipping, and tariffs of about 25 cents. (Other lengths and suppliers of grove cables are available. I usually make my own.)
 
 Because this is a waterproof LED string, you can put these in a damp location IF your module stays well protected from the elements. I'm testing this outdoors in a waterproof electrical box.
 
 
-# For m5stackc6-bme280-zb.yaml:
+# For [m5stackc6-bme280-zb.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/[m5stackc6-bme280-zb.yaml):
 
 * [(Mouser) M5NanoC6](https://www.mouser.com/ProductDetail/M5Stack/C125?qs=jRuttqqUwMQ%2FdHvdW%2FFIaw%3D%3D) ~$6 before tax, shipping, and tariffs of about 50 cents.
   
