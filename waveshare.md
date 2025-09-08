@@ -13,7 +13,7 @@ The PMS5003 or LD2410 modules might be the worst offenders, so disconnect them f
 # For [pms.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/pms.yaml) and [panopticon-pms-bsec2.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/panopticon-pms-bsec2.yaml):
 You will need
 * [ESP32-C6 Dev Kit](https://www.amazon.com/Waveshare-Microcontroller-Development-Single-Core-ESP32-C6-WROOM-1-N8/dp/B0CKR2LF83/) ~$11
-* [HLK-LD2410-B 20GhZ mmWave Sensor with cable] (https://www.amazon.com/JESSINIE-HLK-LD2410B-P-Presence-Bluetooth-LD2410B/dp/B0C36FRVHR) ~$11
+* [HLK-LD2410-B 20GhZ mmWave Sensor with cable](https://www.amazon.com/JESSINIE-HLK-LD2410B-P-Presence-Bluetooth-LD2410B/dp/B0C36FRVHR) ~$11
 * [PMS5003 Particulate Matter Sensor](https://www.amazon.com/BestParts-Digital-Particle-Concentration-PMS5003/dp/B0B1DQKV4N) ~$21
 * [BME 680 Temp, Humdidity, Pressure, and Gas Resistance Sensor with cable](https://www.amazon.com/dp/B0BZ4W6J49?ref=nb_sb_ss_w_as-reorder_k0_1_6&amp=&crid=53Z8SLZ0MUP6&sprefix=bme680&th=1) ~$18
 * [SSD1306 .96 in I2C display](https://www.amazon.com/Display-SSD1306-Self-Luminous-Compatible-Raspberry/dp/B0DY5DS8HK) ~$5/ea
@@ -23,7 +23,7 @@ You will need
 # For [co2.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/co2.yaml) and [panopticon-co2-bsec2.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/panopticon-co2-bsec2.yaml):
 You will need
 * [ESP32-C6 Dev Kit](https://www.amazon.com/Waveshare-Microcontroller-Development-Single-Core-ESP32-C6-WROOM-1-N8/dp/B0CKR2LF83/) ~$11
-* [HLK-LD2410-B 20GhZ mmWave Sensor with cable] (https://www.amazon.com/JESSINIE-HLK-LD2410B-P-Presence-Bluetooth-LD2410B/dp/B0C36FRVHR) ~$11
+* [HLK-LD2410-B 20GhZ mmWave Sensor with cable](https://www.amazon.com/JESSINIE-HLK-LD2410B-P-Presence-Bluetooth-LD2410B/dp/B0C36FRVHR) ~$11
 * For CO2: [MHZ-19B/C](https://www.amazon.com/EC-Buying-Monitoring-Concentration-Detection/dp/B0CRKGP143) ~$25
 * [BME 680 Temp, Humdidity, Pressure, and Gas Resistance Sensor with cable](https://www.amazon.com/dp/B0BZ4W6J49?ref=nb_sb_ss_w_as-reorder_k0_1_6&amp=&crid=53Z8SLZ0MUP6&sprefix=bme680&th=1) ~$18
 * [SSD1306 .96 in I2C display](https://www.amazon.com/Display-SSD1306-Self-Luminous-Compatible-Raspberry/dp/B0DY5DS8HK) ~$5/ea
@@ -34,7 +34,7 @@ You will need
 You will need
 * [ESP32-C6 Dev Kit](https://www.amazon.com/Waveshare-Microcontroller-Development-Single-Core-ESP32-C6-WROOM-1-N8/dp/B0CKR2LF83/) ~$11
 * [BH1750FVI Lux Sensor](https://www.amazon.com/dp/B0CQ2KBVRM) ~ $4
-* [HLK-LD2410-B 20GhZ mmWave Sensor with cable] (https://www.amazon.com/JESSINIE-HLK-LD2410B-P-Presence-Bluetooth-LD2410B/dp/B0C36FRVHR) ~$11
+* [HLK-LD2410-B 20GhZ mmWave Sensor with cable](https://www.amazon.com/JESSINIE-HLK-LD2410B-P-Presence-Bluetooth-LD2410B/dp/B0C36FRVHR) ~$11
 * [BME280](https://www.amazon.com/Pre-Soldered-Atmospheric-Temperature-GY-BME280-3-3-MicroControllers/dp/B0BQFV883T) ~$12 before tax and shipping.
 * DuPont cables and wago connectors  (or some electrical tape)
 * Just use the CO2box.stl, everything will fit.
