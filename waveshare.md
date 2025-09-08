@@ -1,6 +1,9 @@
 # Waveshare ESP32-C6-DEV-KIT-N8
 These are projects that use the larger ESP32-C6 Dev Kit to make multi sensors.
 
+I call these panopticon devices in reference to [Jeremy Bentham](https://en.wikipedia.org/wiki/Jeremy_Bentham) and [Michel Foucault](https://en.wikipedia.org/wiki/Discipline_and_Punish).
+They literally watch multiple things, including you.  
+
 Note: This will work on ZHA, but is not working on Z2M without writing your own handler.
 This is also confirmed to NOT work with Hue, Sonoff, and Tuya gateways.
 
