@@ -10,7 +10,7 @@ This means they might be sending a lot of messages via your Zigbee network causi
 Consider reducing reporting times in these configs and you may want to disable routing for these devices.
 The PMS5003 or LD2410 modules might be the worst offenders, so disconnect them from power if your Zigbee network is crashing.
 
-# For pms.yaml panopticon-pms-bsec2.yaml:
+# For [pms.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/pms.yaml) and [panopticon-pms-bsec2.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/panopticon-pms-bsec2.yaml):
 You will need
 * [ESP32-C6 Dev Kit](https://www.amazon.com/Waveshare-Microcontroller-Development-Single-Core-ESP32-C6-WROOM-1-N8/dp/B0CKR2LF83/) ~$11
 * [HLK-LD2410-B 20GhZ mmWave Sensor with cable] (https://www.amazon.com/JESSINIE-HLK-LD2410B-P-Presence-Bluetooth-LD2410B/dp/B0C36FRVHR) ~$11
@@ -20,7 +20,7 @@ You will need
 * DuPont cables and wago connectors  (or some electrical tape)
 * Use the PMSbox.stl and boxlid.stl to print a project box that hides everything neatly. (I recommend printing in Clear PLA)
 
-# For co2.yaml and panopticon-co2-bsec2.yaml:
+# For [co2.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/co2.yaml) and [panopticon-co2-bsec2.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/panopticon-co2-bsec2.yaml):
 You will need
 * [ESP32-C6 Dev Kit](https://www.amazon.com/Waveshare-Microcontroller-Development-Single-Core-ESP32-C6-WROOM-1-N8/dp/B0CKR2LF83/) ~$11
 * [HLK-LD2410-B 20GhZ mmWave Sensor with cable] (https://www.amazon.com/JESSINIE-HLK-LD2410B-P-Presence-Bluetooth-LD2410B/dp/B0C36FRVHR) ~$11
@@ -30,7 +30,7 @@ You will need
 * DuPont cables and wago connectors  (or some electrical tape)
 * Use the CO2box.stl and boxlid.stl to print a project box that hides everything neatly. (I recommend printing in Clear PLA)
 
-# For panopticon-lux.yaml:
+# For [panopticon-lux.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/panopticon-lux.yaml):
 You will need
 * [ESP32-C6 Dev Kit](https://www.amazon.com/Waveshare-Microcontroller-Development-Single-Core-ESP32-C6-WROOM-1-N8/dp/B0CKR2LF83/) ~$11
 * [BH1750FVI Lux Sensor](https://www.amazon.com/dp/B0CQ2KBVRM) ~ $4
@@ -38,8 +38,9 @@ You will need
 * [BME280](https://www.amazon.com/Pre-Soldered-Atmospheric-Temperature-GY-BME280-3-3-MicroControllers/dp/B0BQFV883T) ~$12 before tax and shipping.
 * DuPont cables and wago connectors  (or some electrical tape)
 * Just use the CO2box.stl, everything will fit.
+* I don't know if you really need to use a Lux sensor if you also have an LD2410 module, but they're cheap.
   
-# panopticon-pms-bsec2.yaml panopticon-co2-bsec2.yaml
+# BSEC2 - [panopticon-pms-bsec2.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/panopticon-pms-bsec2.yaml) and [panopticon-co2-bsec2.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/panopticon-co2-bsec2.yaml)
 These files use [Bosch's proprietary BSEC2 libary](https://github.com/boschsensortec/Bosch-BSEC2-Library). These offer IAQ/Air Quality and Sensor accuracy sensors in addition to Temperature, Humidity, Motion, etc.
 The IAQ and Accuracy sensors have been slightly altered from the config examples offered by ESPHome by converting these to percentages.
 The display also shows shorter/more readable AQI interpretations plus sensor accuracy. Display is in a better layout for readability.
