@@ -4,6 +4,11 @@ These are projects that use the larger ESP32-C6 Dev Kit to make multi sensors.
 Note: This will work on ZHA, but is not working on Z2M without writing your own handler.
 This is also confirmed to NOT work with Hue, Sonoff, and Tuya gateways.
 
+!! These devices may be "chatty" !! 
+This means they might be sending a lot of messages via your Zigbee network causing slowness/instability/crashing.
+Consider reducing reporting times in these configs and you may want to disable routing for these devices.
+The PMS5003 or LD2410 modules might be the worst offenders, so disconnect them from power if your Zigbee network is crashing.
+
 # For pms.yaml panopticon-pms-bsec2.yaml:
 You will need
 * [ESP32-C6 Dev Kit](https://www.amazon.com/Waveshare-Microcontroller-Development-Single-Core-ESP32-C6-WROOM-1-N8/dp/B0CKR2LF83/) ~$11
