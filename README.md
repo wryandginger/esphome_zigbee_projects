@@ -11,6 +11,7 @@ To save yourself a lot of frustration and anger, you should ALWAYS freeze any wo
 
 These instructions work with the ESPHome 2025.7 legacy addon as of 9/1/2025:
 
+Troubleshoot by clearing build files and erasing flash memory by using the [ESP Tool](https://espressif.github.io/esptool-js/)
 -----------------------------
 
 This is made possible by the hard work of @luar123  for the [zigbee_esphome external component.](https://github.com/luar123/zigbee_esphome)
