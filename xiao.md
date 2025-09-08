@@ -5,7 +5,7 @@ Use xiao.yaml and customize as needed.
 Note: This will work on ZHA, but is not working on Z2M without writing your own handler.
 This is also confirmed to NOT work with Hue, Sonoff, and Tuya gateways.
 
-# For xiao.yaml:
+# For [xiao.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/xiao.yaml):
 You will need
 * [XIAO MR60BHA2](https://www.amazon.com/dp/B0F3CCM5P6?ref=ppx_yo2ov_dt_b_fed_asin_title) ~$26 plus tax and shipping
 * that's it!
@@ -13,7 +13,7 @@ You will need
 # Install Instructions
 1. Remove the 3d printed back cover.
 2. Plug a USB-C cable into the XIAO module, not the port closest to the grove port.
-3. IMPORTANT: Download Ardunino IDE and follow the instructions [here](https://wiki.seeedstudio.com/getting_started_with_mr60bha2_mmwave_kit/#module-firmware-upgrade) to update the mmWave module firmware. Fimware <1.10 has a lot of bugs! 
+3. IMPORTANT: Download Ardunino IDE and follow the instructions [here](https://wiki.seeedstudio.com/getting_started_with_mr60bha2_mmwave_kit/#module-firmware-upgrade) to update the mmWave module firmware. (Firmware <1.10 has a lot of bugs!) 
 4. After your firmware is updated, go to github and download partitions_zb.csv then place in /config/esphome
 5. Prep your device in esphome. I usually just select ESP32-C6 and skip everything.
 6. Replace the new YAML file with the desired config from this repo and build your project. Note: No WiFi or OTA are available so any flashing has to be done via USB. Press and hold the button as you plug in the USB cable if you need to get into the bootloader.
