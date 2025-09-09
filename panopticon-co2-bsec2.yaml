@@ -95,12 +95,12 @@ sensor:
     name: Temperature_F
     id: temperature_f
     lambda: return id(temperature).state * 9/5+32;
-    update_interval: 60s
+    update_interval: 120s
   - platform: template
     id: qualnum1
     lambda: |-
       return static_cast<int>(std::atoi(id(qualnum).state.c_str()));
-    update_interval: 60s
+    update_interval: 200s
     on_value:
       then:
         - zigbee.setAttr:
@@ -111,13 +111,12 @@ sensor:
     id: accunum1
     lambda: |-
       return static_cast<int>(std::atoi(id(accunum).state.c_str()));
-    update_interval: 60s
+    update_interval: 200s
     on_value:
       then:
         - zigbee.setAttr:
             id: setaccu
             value: !lambda "return x;"
-        - zigbee.report: zb
   - platform: bme68x_bsec2
     temperature:
       name: "BME680 Temperature"
@@ -144,7 +143,7 @@ sensor:
     temperature:
       name: MH-Z19 Temperature
       id: temp2
-    update_interval: 60s
+    update_interval: 120s
 
   - platform: ld2410
     light:
