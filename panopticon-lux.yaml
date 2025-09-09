@@ -81,7 +81,7 @@ sensor:
     name: "BH1750 Illuminance"
     id: lux1
     address: 0x23
-    update_interval: 6s
+    update_interval: 120s
 
   - platform: ld2410
     light:
@@ -149,7 +149,7 @@ zigbee:
               type: 8BIT_ENUM
               report: true
               value: 0x02 #0x00 -> PIR; 0x01 -> sonic; 0x02 -> PIR & sonic
-        - id: ILLUMINANCE_MEASUREMENT
+        - id: ILLUMINANCE_MEASUREMENT # Consider disabling this attribute to reduce chatter 
           attributes:
             - attribute_id: 0
               type: U16
