@@ -7,9 +7,9 @@ They literally watch multiple things, including you.
 Note: This will work on ZHA, but is not working on Z2M without writing your own handler.
 This is also confirmed to NOT work with Hue, Sonoff, and Tuya gateways.
 
-!! These devices may be "chatty" !! 
+!! Warning: These devices can get chatty!
 
-This means they might be sending a lot of messages via your Zigbee network causing slowness/instability/crashing.
+This means they can send a lot of messages via your Zigbee network causing slowness/instability/crashing.
 Adjustments have been made to reduce the amount of network chatter, but you may need to change reporting times or remove zigbee attributes to maintain stability on your setup.
 
 The PMS5003 and LD2410 modules (especially in Engineering Mode) are the worst offenders. So if your Zigbee network crashes, reports RF interference, or constantly re-initializes: 
@@ -17,7 +17,9 @@ The PMS5003 and LD2410 modules (especially in Engineering Mode) are the worst of
 2. Manually disable ZHA.
 3. Manually restart your Zigbee network coordinator and/or Home Assistant.
 4. Re-enable ZHA and monitor logs.
-5. Adjust your device configuration to report less data, either by reducing reporting times or by reducing the amount of sensors/attributes pushed via Zigbee. 
+5. Adjust your device configuration to report less data, either by reducing reporting times or by reducing the amount of sensors/attributes pushed via Zigbee.
+6. Reflash config. (Clean build files and erase flash using esptool if you have issues reflashing.)
+7. Remove and re-pair the Panopticon device via ZHA. 
 
 # For [pms.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/pms.yaml) and [panopticon-pms-bsec2.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/panopticon-pms-bsec2.yaml):
 You will need
