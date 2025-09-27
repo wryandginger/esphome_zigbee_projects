@@ -10,16 +10,30 @@ This is also confirmed to NOT work with Hue, Sonoff, and Tuya gateways.
 !! Warning: These devices can get chatty!
 
 This means they can send a lot of messages via your Zigbee network causing slowness/instability/crashing.
-Adjustments have been made to reduce the amount of network chatter, but you may need to change reporting times or remove zigbee attributes to maintain stability on your setup.
+Adjustments have been made to reduce the amount of network chatter, but you may need to change reporting times or remove zigbee attributes to maintain stability on your setup. The PMS5003 and LD2410 modules (especially in Engineering Mode) are the worst offenders.
 
-The PMS5003 and LD2410 modules (especially in Engineering Mode) are the worst offenders. So if your Zigbee network crashes, reports RF interference, or constantly re-initializes: 
-1. Disconnect all Panopticon devices from power. 
+# Troubleshooting Zigbee Network Crashing
+If your Zigbee network crashes, reports RF interference, or constantly re-initializes: 
+1. Disconnect all DIY/custom zigbee devices from power. 
 2. Manually disable ZHA.
-3. Manually restart your Zigbee network coordinator and/or Home Assistant.
+3. Manually restart your Zigbee network coordinator and/or Home Assistant and wait 2-5 minutes.
 4. Re-enable ZHA and monitor logs.
-5. Adjust your device configuration to report less data, either by reducing reporting times or by reducing the amount of sensors/attributes pushed via Zigbee.
-6. Reflash config. (Clean build files and erase flash using esptool if you have issues reflashing.)
-7. Remove and re-pair the Panopticon device via ZHA. 
+5. If crashing continues, adjust your device configuration to report less data, either by reducing reporting times or by reducing the amount of sensors/attributes pushed via Zigbee.
+7. Reflash config. (Clean build files and erase flash using esptool if you have issues reflashing.)
+8. Remove and re-pair the Panopticon device via ZHA.
+
+# Troubleshooting Stuck Motion Sensors
+On a reboot or after a power loss, the LD2410B module will occasionally stop communicating with the board. This results in no updated sensor data or "nan" for target distance.
+Try turning on/off the bluetooth and engineering mode switches via zigbee. This sometimes fixes things.
+
+If your LD2410B is still stuck, you need to force the device to restart the UART bus:
+1. Download HiLink's HLKRadarTool app
+2. Connect to the stuck sensor and verify that it is showing accrate sensor data in the HLKRadarTool app.
+3. Turn on Engineering Mode
+4. Go to "Settings"
+5. Change "Baud rate setting" to 9600
+6. The device should automatically restart and sensor data should be showing via Zigbee network.
+7. Try again if this fails, but usually once or twice fixes it.
 
 # For [pms.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/pms.yaml) and [panopticon-pms-bsec2.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/panopticon-pms-bsec2.yaml):
 You will need
