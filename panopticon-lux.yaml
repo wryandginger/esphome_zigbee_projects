@@ -8,8 +8,6 @@ esp32:
   partitions: partitions_zb.csv
   framework:
     type: esp-idf
-    version: 5.3.0
-    platform_version: 6.8.1
     sdkconfig_options:
       CONFIG_ESPTOOLPY_FLASHSIZE_4MB: y
 
@@ -27,6 +25,7 @@ uart:
 
 ld2410:
   - uart_id: motion_bus
+
 light:
   - platform: esp32_rmt_led_strip
     rgb_order: RGB
@@ -77,6 +76,8 @@ sensor:
       name: "Humidity"
       id: humidity
     address: 0x76
+    update_interval: 120s
+
   - platform: bh1750
     name: "BH1750 Illuminance"
     id: lux1
@@ -149,15 +150,20 @@ zigbee:
               type: 8BIT_ENUM
               report: true
               value: 0x02 #0x00 -> PIR; 0x01 -> sonic; 0x02 -> PIR & sonic
-        - id: ILLUMINANCE_MEASUREMENT # Consider disabling this attribute to reduce chatter 
-          attributes:
-            - attribute_id: 0
-              type: U16
+        - id: BINARY_INPUT
+          attributes: 
+            - attribute_id: 0x001C
+              type: CHAR_STRING
+              max_length: 6
               report: true
-              value: 0
-              device: ldlux
-              lambda: !lambda "return log10(x)*10000 + 1;"
-             
+              value: Motion
+            - attribute_id: 0x0051
+              type: bool
+              value: false
+            - attribute_id: 0x0055
+              type: bool
+              device: motion
+              report: true
     - num: 2
       device_type: COLOR_DIMMABLE_LIGHT
       clusters:
@@ -201,26 +207,8 @@ zigbee:
                       red: !lambda "return zigbee::get_r_from_xy(id(color_x), id(color_y));"
                       green: !lambda "return zigbee::get_g_from_xy(id(color_x), id(color_y));"
                       blue: !lambda "return zigbee::get_b_from_xy(id(color_x), id(color_y));"
-    - device_type: SIMPLE_SENSOR
-      num: 3
-      clusters:
-        - id: BINARY_INPUT
-          attributes: 
-            - attribute_id: 0x001C
-              type: CHAR_STRING
-              max_length: 6
-              report: true
-              value: Motion
-            - attribute_id: 0x0051
-              type: bool
-              value: false
-            - attribute_id: 0x0055
-              type: bool
-              device: motion
-              report: true
-
     - device_type: TEMPERATURE_SENSOR
-      num: 4
+      num: 3
       clusters:
         - id: REL_HUMIDITY_MEASUREMENT
           attributes:
@@ -253,7 +241,7 @@ zigbee:
               value: 0
               device: lux1
               lambda: !lambda "return log10(x)*10000 + 1;"
-    - num: 5
+    - num: 4
       device_type: ON_OFF_OUTPUT
       clusters:
         - id: ON_OFF
@@ -268,7 +256,7 @@ zigbee:
               on_value:
                 then:   
                   - switch.turn_on: emode
-    - num: 6
+    - num: 5
       device_type: ON_OFF_OUTPUT
       clusters:
         - id: ON_OFF
@@ -284,32 +272,7 @@ zigbee:
                 then:   
                   - switch.turn_on: bmode
     - device_type: SIMPLE_SENSOR
-      num: 7
-      clusters:
-        - id:  ANALOG_INPUT
-          attributes:
-            - attribute_id: 0x001C
-              type: CHAR_STRING
-              max_length: 11
-              report: true
-              value: Move Energy
-            - attribute_id: 0x0051
-              type: bool
-              value: false
-            - attribute_id: 0x0055
-              type: single
-              device: menergy
-              value: 100
-              report: true
-            - attribute_id: 0x0075
-              type: 16BIT_ENUM
-              value: 98 # == generic & use BACNet Engineering Unit Enumeration List
-              report: true
-            - attribute_id: 0x006F
-              type: 8BITMAP
-              value: 0
-    - device_type: SIMPLE_SENSOR
-      num: 8
+      num: 6
       clusters:
         - id:  ANALOG_INPUT
           attributes:
@@ -333,53 +296,3 @@ zigbee:
             - attribute_id: 0x006F
               type: 8BITMAP
               value: 0
-    - device_type: SIMPLE_SENSOR
-      num: 9
-      clusters:
-        - id:  ANALOG_INPUT
-          attributes:
-            - attribute_id: 0x001C
-              type: CHAR_STRING
-              max_length: 12
-              report: true
-              value: Still Energy
-            - attribute_id: 0x0051
-              type: bool
-              value: false
-            - attribute_id: 0x0055
-              type: single
-              device: senergy
-              value: 100
-              report: true
-            - attribute_id: 0x0075
-              type: 16BIT_ENUM
-              value: 98 # == generic & 
-              report: true
-            - attribute_id: 0x006F
-              type: 8BITMAP
-              value: 0
-    - device_type: SIMPLE_SENSOR
-      num: 10
-      clusters:
-        - id:  ANALOG_INPUT
-          attributes:
-            - attribute_id: 0x001C
-              type: CHAR_STRING
-              max_length: 10    #  This needs to match character count of value below
-              report: true
-              value: Move Dist.    #  Sensor Name
-            - attribute_id: 0x0051
-              type: bool
-              value: false
-            - attribute_id: 0x0055
-              type: single
-              report: true
-              value: 0
-              device: mdistance    #  Sensor ID defined earlier
-            - attribute_id: 0x0075
-              type: 16BIT_ENUM
-              value: 118     # centimeters
-              report: true
-            - attribute_id: 0x006F
-              type: 8BITMAP
-              value: 0 
