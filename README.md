@@ -1,15 +1,16 @@
 # Zigbee ESPHome Projects
 
-This Repo Contains ESPHome YAML configurations and other files that might be useful in building Zigbee devices using ESPHome 2025.7.5
+This Repo Contains ESPHome YAML configurations and other files that might be useful in building Zigbee devices using ESPHome 2025.9.2
 
-Note: ESPHome 2025.8.1+ breaks [I2C](https://github.com/esphome/esphome/issues/10498) and [UART using esp-idf](https://github.com/esphome/esphome/issues/10515) -- Be warned, ESPHome will ALWAYS break non-standard/custom integrations on a new version.
+Note: For the M5Stack NanoC6, ESPHome 2025.8.1+ breaks [I2C](https://github.com/esphome/esphome/issues/10498) and [UART using esp-idf](https://github.com/esphome/esphome/issues/10515) -- Be warned, ESPHome will ALWAYS break non-standard/custom integrations on a new version.
 
 As a rule, you should NEVER trust software updates will work as intended. Always make several backups (including yaml files, encryption keys, etc.).
 
 To save yourself a lot of frustration and anger, you should ALWAYS freeze any working version of ESPHome by using [khendrick's ESPHome legacy addons](https://github.com/khenderick/esphome-legacy-addons)
 (i.e. Before a new monthly release, install the current month's legacy add-on. Doing things this way will allow you beta test future versions until everything can correctly complile on your specialized hardware.)
 
-These instructions work with the ESPHome 2025.7 legacy addon as of 9/1/2025:
+Most instructions will work with the ESPHome 2025.9.2 as of 9/30/2025.
+Please note, m5stackc6-bme280-zb.yaml requires 2025.7.5 due to a compile bug with I2C mentioned above.
 
 Troubleshoot by clearing build files in ESPHome and erasing memory before flashing by using the [ESP Tool](https://espressif.github.io/esptool-js/)
 
