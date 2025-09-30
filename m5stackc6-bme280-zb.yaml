@@ -1,3 +1,5 @@
+# As of 9.30.2025, this only will compile on ESPHome 2025.7.5 
+
 esphome:
   name: m5stackc6-bme280-zb
   friendly_name: M5Stack NanoC6 BME280 THP Sensor ZB
