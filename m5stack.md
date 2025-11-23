@@ -72,9 +72,3 @@ To Reset/Set to Pairing (Only needed if you fiddle with the code a bunch):
 4. Release for 1+ seconds
    
 The lights should then turn off. Unplug/Plug in the NanoC6 and you’re back in pairing mode.
-
-
-Confirmed NOT working:
-* eWeLink/Sonoff ZBBridge - NanoC6 fails to be discovered on versions 1.4-1.7
-  I was able to get the device to pair once, but never responded to commands.
-* Hue - requires some special keys to be added
