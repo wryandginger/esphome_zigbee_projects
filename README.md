@@ -32,11 +32,11 @@ A lot of the code is based on examples in the github repo above, but I was havin
 # Installation Instructions:
 These are sorted by devkit manufacturer and function.
 
-# [m5stack.md](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/m5stack.md)
+* [m5stack.md](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/m5stack.md)
 Contains instructions for making lights using the M5Stack NanoC6
 
-# [xiao.md](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/xiao.md)
+* [xiao.md](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/xiao.md)
 Contains instructions for using the XIAO MR60BHA2 60GHz mmWave Human Breathing and Heartbeat Sensor Kit 
 
-# [waveshare.md](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/waveshare.md) 
+* [waveshare.md](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/waveshare.md) 
 Contains instructions for using the Waveshare ESP32-C6-DEV-KIT-N8 (and likely other makers too) to make multi sensors. (Uses LD2410B, BME680, and generic lux sensors)
