@@ -1,3 +1,7 @@
+# Note: The BSEC2 library is only available for use after accepting its software license agreement. 
+# By compiling this configuration, you are explicitly agreeing to the terms of the BSEC license agreement. 
+# https://www.bosch-sensortec.com/media/boschsensortec/downloads/software/bme688_development_software/2024_12/20241219_clickthrough_license_terms_bsec_bme680_bme688_bme690.pdf
+
 esphome:
   name: panopticon-lux-bsec2
   friendly_name: panopticon-lux-bsec2
@@ -5,8 +9,8 @@ esphome:
     - priority: 10
       then:
         lambda: |-
-          id(bmode).turn_off();       # Turns of engineering and bluetooth modes at boot. Use the zigbee switches to enable, turn off switch then reboot to disable.
-          id(emode).turn_off();       # Bluetooth mode is disabled by default to reduce EMF and help with network performance. Engineering mode is disabled to free system resources and reduce power.
+          id(bmode).turn_off();       
+          id(emode).turn_off();      
 esp32:
   board: esp32-c6-devkitm-1
   variant: esp32c6
@@ -82,7 +86,7 @@ bme68x_bsec2_i2c:
 
 sensor:
   - platform: template
-    name: Temperature_F   # This is for the display only. You can omit this if you're not from the USA. Be sure to adjust the display lambda if you are all metric.
+    name: Temperature_F  
     filters:
         - round: 1
     id: temperature_f
@@ -92,18 +96,18 @@ sensor:
     id: qualnum1
     lambda: |-
       return static_cast<int>(std::atoi(id(qualnum).state.c_str()));
-    update_interval: 125s     # Increase this interval if your device is too chatty.
+    update_interval: 125s    
     on_value:
       then:
         - zigbee.setAttr:
             id: setqual
             value: !lambda "return x;"
-        - zigbee.report: zb       # For whatever reason, this is necessary or the sensor never updates
+        - zigbee.report: zb       
   - platform: template
     id: accunum1
     lambda: |-
       return static_cast<int>(std::atoi(id(accunum).state.c_str()));
-    update_interval: 300s   # Increase this interval if your device is too chatty.
+    update_interval: 300s   
     on_value:
       then:
         - zigbee.setAttr:
@@ -129,7 +133,7 @@ sensor:
       name: "BME680 Gas Resistance"
       id: gasresist
       filters:
-        - round: 1   # These filters do nothing. You can probably omit these.
+        - round: 1   
     iaq:
       name: "BME68x IAQ"
       id: iaq
@@ -260,10 +264,10 @@ text_sensor:
 switch:
   - platform: ld2410
     engineering_mode:
-      name: "engineering mode" # Enable this if the sensor gets stuck or you need to troubleshoot
+      name: "engineering mode" 
       id: emode
     bluetooth:
-      name: "control bluetooth" # Enable this to adjust sensitivity and other options using the HLKRadarTool app.
+      name: "control bluetooth" 
       id: bmode
 
 font:
@@ -306,17 +310,17 @@ zigbee:
       clusters:
         - id: OCCUPANCY_SENSING
           attributes:
-            - id: zb_occupancy # actual state as bit. 0 -> empty; 1 -> occupied 
+            - id: zb_occupancy 
               attribute_id: 0x000
               type: 8BITMAP
               report: true
               value: 0
               device: target
-              lambda: !lambda "return x ? 1 : 0;" # perhaps not needed
+              lambda: !lambda "return x ? 1 : 0;" 
             - attribute_id: 0x0001
               type: 8BIT_ENUM
               report: true
-              value: 0x02 #0x00 -> PIR; 0x01 -> sonic; 0x02 -> PIR & sonic
+              value: 0x02 
         - id: BINARY_INPUT
           attributes: 
             - attribute_id: 0x001C
@@ -480,7 +484,7 @@ zigbee:
               device: ddistance
             - attribute_id: 0x0075
               type: 16BIT_ENUM
-              value: 118 # == centemeters
+              value: 118 
               report: true
             - attribute_id: 0x006F
               type: 8BITMAP
@@ -519,7 +523,7 @@ zigbee:
               report: true
             - attribute_id: 0x0075
               type: 16BIT_ENUM
-              value: 95 # == count
+              value: 95 
               report: true
             - attribute_id: 0x006F
               type: 8BITMAP
@@ -544,7 +548,7 @@ zigbee:
               report: true
             - attribute_id: 0x0075
               type: 16BIT_ENUM
-              value: 98 # == generic percent
+              value: 98 
               report: true
             - attribute_id: 0x006F
               type: 8BITMAP
@@ -569,7 +573,7 @@ zigbee:
               report: true
             - attribute_id: 0x0075
               type: 16BIT_ENUM
-              value: 98 # == generic percent
+              value: 98 
               report: true
             - attribute_id: 0x006F
               type: 8BITMAP
