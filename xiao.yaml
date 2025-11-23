@@ -254,3 +254,10 @@ zigbee:
             - attribute_id: 0x006F
               type: 8BITMAP
               value: 0
+
+button:
+  - platform: template
+    name: reset
+    on_press:
+      then:
+        - zigbee.reset: zb
