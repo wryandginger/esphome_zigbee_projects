@@ -255,10 +255,10 @@ text_sensor:
       }
 
 interval:
-  - interval: 200s
+  - interval: 205s
     then:
       - switch.turn_on: pms_set
-      - delay: 8s
+      - delay: 35s
       - switch.turn_off: pms_set
 
 font:
