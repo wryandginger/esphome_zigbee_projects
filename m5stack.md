@@ -28,19 +28,6 @@
 
 Because this is a waterproof LED string, you can put these in a damp location IF your module stays well protected from the elements. I'm testing this outdoors in a waterproof electrical box.
 
-
-# For [m5stackc6-bme280-zb.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/[m5stackc6-bme280-zb.yaml):
-
-* [(Mouser) M5NanoC6](https://www.mouser.com/ProductDetail/M5Stack/C125?qs=jRuttqqUwMQ%2FdHvdW%2FFIaw%3D%3D) ~$6 before tax, shipping, and tariffs of about 50 cents.
-  
-* [(Amazon) BME280](https://www.amazon.com/Pre-Soldered-Atmospheric-Temperature-GY-BME280-3-3-MicroControllers/dp/B0BQFV883T) ~$12 before tax and shipping.
-  (Don't buy this. I'm just using leftover parts from an older project. You should just buy a M5stack BME688 module at Mouser.)
-
-* [(Mouser) M5Stack Grove Cable](https://www.mouser.com/ProductDetail/M5Stack/A034-D?qs=81r%252BiQLm7BQIX3ZPS9TpAA%3D%3D)  ~$2 before tax, shipping, and tariffs of about 25 cents.
-
-This produces a Temperature, Humidity, and Pressure sensor. Use this for the example code, but like I said there are better sensors out there than the BME 280, I think.
-My next project is to buy a different C6 module and make Particulate Matter and CO2 sensors, stay tuned.
-  
 # Install Instructions
 
 1. Once you have your materials, connect your LED strip to the Grove cable, and the cable to the module. (For WS2182 and BME280, cut the grove cable in half and connect your 5V, GND, and data pins to the red, black, and yellow grove cables.
@@ -86,8 +73,6 @@ To Reset/Set to Pairing (Only needed if you fiddle with the code a bunch):
    
 The lights should then turn off. Unplug/Plug in the NanoC6 and you’re back in pairing mode.
 
-# Please adapt, test, and share!
-If you can test, please tell me if this code does or does not work on Z2M, Hue, or any other hub you might have access to. I'll update this repo with any new information I have as I test the stability of these as routers.
 
 Confirmed NOT working:
 * eWeLink/Sonoff ZBBridge - NanoC6 fails to be discovered on versions 1.4-1.7
