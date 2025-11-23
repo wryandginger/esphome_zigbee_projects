@@ -8,8 +8,6 @@ esp32:
   partitions: partitions_zb.csv
   framework:
     type: esp-idf
-    version: 5.2.1
-    platform_version: 6.7.0
     sdkconfig_options:
       CONFIG_ESPTOOLPY_FLASHSIZE_4MB: y
 
@@ -101,6 +99,7 @@ sensor:
     id: "i_temp"
     filters:
       - delta: 0.1
+    update_interval: 240s
 
 external_components:
   - source: github://luar123/zigbee_esphome
@@ -133,7 +132,7 @@ zigbee:
                 then:                
                   - light.control:
                       id: ledstrip
-                      state: !lambda "return (bool)x;"
+                      state: !lambda "return x;"
         - id: LEVEL_CONTROL
           attributes:
             - attribute_id: 0
@@ -178,7 +177,7 @@ zigbee:
                 then:
                   - light.control:
                       id: button_light
-                      state: !lambda "return (bool)x;"
+                      state: !lambda "return x;"
         - id: LEVEL_CONTROL
           attributes:
             - attribute_id: 0
@@ -222,7 +221,7 @@ zigbee:
                 then:
                   - light.control:
                       id: blueled
-                      state: !lambda "return (bool)x;"
+                      state: !lambda "return x;"
         - id: LEVEL_CONTROL
           attributes:
             - attribute_id: 0
@@ -262,13 +261,13 @@ zigbee:
                             effect: random
                         - zigbee.setAttr:
                             id: led_strip1
-                            value: !lambda "return (bool)x;"
+                            value: !lambda "return x;"
                       else:
                         - light.turn_off:
                             id: ledstrip           
                         - zigbee.setAttr:
                             id: led_strip1
-                            value: !lambda "return (bool)x;"         
+                            value: !lambda "return x;"         
     - num: 6
       device_type: ON_OFF_OUTPUT
       clusters:
@@ -287,13 +286,13 @@ zigbee:
                             effect: rainbow
                         - zigbee.setAttr:
                             id: led_strip1
-                            value: !lambda "return (bool)x;"
+                            value: !lambda "return x;"
                       else:
                         - light.turn_off:
                             id: ledstrip           
                         - zigbee.setAttr:
                             id: led_strip1
-                            value: !lambda "return (bool)x;"              
+                            value: !lambda "return x;"              
     - num: 7
       device_type: ON_OFF_OUTPUT
       clusters:
@@ -312,13 +311,13 @@ zigbee:
                             effect: twinkle
                         - zigbee.setAttr:
                             id: led_strip1
-                            value: !lambda "return (bool)x;"
+                            value: !lambda "return x;"
                       else:
                         - light.turn_off:
                             id: ledstrip           
                         - zigbee.setAttr:
                             id: led_strip1
-                            value: !lambda "return (bool)x;"         
+                            value: !lambda "return x;"         
     - num: 8
       device_type: ON_OFF_OUTPUT
       clusters:
@@ -337,13 +336,13 @@ zigbee:
                             effect: flicker
                         - zigbee.setAttr:
                             id: led_strip1
-                            value: !lambda "return (bool)x;"
+                            value: !lambda "return x;"
                       else:
                         - light.turn_off:
                             id: ledstrip           
                         - zigbee.setAttr:
                             id: led_strip1
-                            value: !lambda "return (bool)x;"         
+                            value: !lambda "return x;"         
     - num: 9
       device_type: ON_OFF_OUTPUT
       clusters:
@@ -362,13 +361,13 @@ zigbee:
                             effect: fireworks
                         - zigbee.setAttr:
                             id: led_strip1
-                            value: !lambda "return (bool)x;"
+                            value: !lambda "return x;"
                       else:
                         - light.turn_off:
                             id: ledstrip           
                         - zigbee.setAttr:
                             id: led_strip1
-                            value: !lambda "return (bool)x;"        
+                            value: !lambda "return x;"        
     - num: 10
       device_type: ON_OFF_OUTPUT
       clusters:
@@ -387,10 +386,10 @@ zigbee:
                             effect: scan
                         - zigbee.setAttr:
                             id: led_strip1
-                            value: !lambda "return (bool)x;"
+                            value: !lambda "return x;"
                       else:
                         - light.turn_off:
                             id: ledstrip           
                         - zigbee.setAttr:
                             id: led_strip1
-                            value: !lambda "return (bool)x;"   
+                            value: !lambda "return x;"   
