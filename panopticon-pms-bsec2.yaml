@@ -1,20 +1,16 @@
 # Note: The BSEC2 library is only available for use after accepting its software license agreement. 
 # By compiling this configuration, you are explicitly agreeing to the terms of the BSEC license agreement. 
-# As of 12/2024 the license grants non-exclusive, non-transferable and non-sublicensable right 
-# to generate and copy compiled object code of the Software 
-# and to use and sell compiled object code of the Software in compliance with the license
-#
-# tl;dr - Derivitives of this config and any items you make based on this config are probably okay to sell
-# as long as it's a consumer electronics device not used in life-sustaining or safety-critical systems
-# it cannot be used for military applications, nor can you give/sell this to an embargoed/hostile nation
-#
-# This is not legal advice and I am not your lawyer. 
-# By compiling you indemnify me, Bosch, github, and anyone else from legal action.
-# In other words, compile at your own risk. 
+# https://www.bosch-sensortec.com/media/boschsensortec/downloads/software/bme688_development_software/2024_12/20241219_clickthrough_license_terms_bsec_bme680_bme688_bme690.pdf
 
 esphome:
   name: panopticon-pms-bsec2
   friendly_name: Panopticon PMS BSEC2
+  on_boot:
+    - priority: 10
+      then:
+        lambda: |-
+          id(bmode).turn_off();
+          id(emode).turn_off();
 
 esp32:
   board: esp32-c6-devkitm-1
@@ -44,7 +40,6 @@ light:
     rgb_order: RGB
     pin: GPIO08
     num_leds: 1
-    # rmt_channel: 0 ### this stopped working 2025/02
     chipset: WS2812
     rmt_symbols: 48
     id: "led_1"
@@ -57,11 +52,14 @@ light:
 binary_sensor:
   - platform: ld2410
     has_target:
-      name: Presence
-      id: presence
+      name: Target
+      id: target
     has_moving_target:
       name: Moving Target
       id: motion
+    has_still_target:
+      name: Still Target
+      id: starget
   - platform: gpio
     pin:
       number: 9
@@ -96,7 +94,7 @@ sensor:
     id: qualnum1
     lambda: |-
       return static_cast<int>(std::atoi(id(qualnum).state.c_str()));
-    update_interval: 120s
+    update_interval: 125s
     on_value:
       then:
         - zigbee.setAttr:
@@ -107,7 +105,7 @@ sensor:
     id: accunum1
     lambda: |-
       return static_cast<int>(std::atoi(id(accunum).state.c_str()));
-    update_interval: 120s
+    update_interval: 300s
     on_value:
       then:
         - zigbee.setAttr:
@@ -166,11 +164,9 @@ switch:
     engineering_mode:
       name: "engineering mode"
       id: emode
-      restore_mode: RESTORE_DEFAULT_OFF
     bluetooth:
       name: "control bluetooth"
       id: bmode
-      restore_mode: RESTORE_DEFAULT_OFF
   - platform: gpio
     pin: 
       number: GPIO10
@@ -305,17 +301,17 @@ zigbee:
       clusters:
         - id: OCCUPANCY_SENSING
           attributes:
-            - id: zb_occupancy # actual state as bit. 0 -> empty; 1 -> occupied 
+            - id: zb_occupancy 
               attribute_id: 0x000
               type: 8BITMAP
               report: true
               value: 0
-              device: presence
-              lambda: !lambda "return x ? 1 : 0;" # perhaps not needed
+              device: target
+              lambda: !lambda "return x ? 1 : 0;" 
             - attribute_id: 0x0001
               type: 8BIT_ENUM
               report: true
-              value: 0x02 #0x00 -> PIR; 0x01 -> sonic; 0x02 -> PIR & sonic
+              value: 0x02
         - id: ILLUMINANCE_MEASUREMENT
           attributes:
             - attribute_id: 0
@@ -331,10 +327,10 @@ zigbee:
               report: true
               value: 0
               device: pm2
-            - attribute_id: 0x2 # maximum value is needed!
+            - attribute_id: 0x2
               type: single
               value: 999  
-        - id:  ANALOG_INPUT
+        - id: ANALOG_INPUT
           attributes:
             - attribute_id: 0x001C
               type: CHAR_STRING
@@ -351,11 +347,26 @@ zigbee:
               report: true
             - attribute_id: 0x0075
               type: 16BIT_ENUM
-              value: 219 # == ohm
+              value: 219
               report: true
             - attribute_id: 0x006F
               type: 8BITMAP
               value: 0           
+        - id: BINARY_INPUT
+          attributes: 
+            - attribute_id: 0x001C
+              type: CHAR_STRING
+              max_length: 6
+              report: true
+              value: Motion
+            - attribute_id: 0x0051
+              type: bool
+              value: false
+            - attribute_id: 0x0055
+              type: bool
+              device: motion
+              report: true
+
     - num: 2
       device_type: COLOR_DIMMABLE_LIGHT
       clusters:
@@ -472,6 +483,20 @@ zigbee:
             - attribute_id: 0x006F
               type: 8BITMAP
               value: 0
+        - id: BINARY_INPUT
+          attributes: 
+            - attribute_id: 0x001C
+              type: CHAR_STRING
+              max_length: 12
+              report: true
+              value: Still Target
+            - attribute_id: 0x0051
+              type: bool
+              value: false
+            - attribute_id: 0x0055
+              type: bool
+              device: starget
+              report: true
     - num: 5
       device_type: ON_OFF_OUTPUT
       clusters:
@@ -522,7 +547,7 @@ zigbee:
               report: true
             - attribute_id: 0x0075
               type: 16BIT_ENUM
-              value: 95 # == count
+              value: 95
               report: true
             - attribute_id: 0x006F
               type: 8BITMAP
@@ -547,7 +572,7 @@ zigbee:
               report: true
             - attribute_id: 0x0075
               type: 16BIT_ENUM
-              value: 98 # == generic percent
+              value: 98
               report: true
             - attribute_id: 0x006F
               type: 8BITMAP
@@ -572,7 +597,32 @@ zigbee:
               report: true
             - attribute_id: 0x0075
               type: 16BIT_ENUM
-              value: 98 # == generic percent
+              value: 98
+              report: true
+            - attribute_id: 0x006F
+              type: 8BITMAP
+              value: 0
+    - device_type: SIMPLE_SENSOR
+      num: 10
+      clusters:
+        - id:  ANALOG_INPUT
+          attributes:
+            - attribute_id: 0x001C
+              type: CHAR_STRING
+              max_length: 11
+              report: true
+              value: Target Dist
+            - attribute_id: 0x0051
+              type: bool
+              value: false
+            - attribute_id: 0x0055
+              type: single
+              report: true
+              value: 0
+              device: ddistance
+            - attribute_id: 0x0075
+              type: 16BIT_ENUM
+              value: 118 
               report: true
             - attribute_id: 0x006F
               type: 8BITMAP
