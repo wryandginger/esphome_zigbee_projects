@@ -8,8 +8,6 @@ esp32:
   partitions: partitions_zb.csv
   framework:
     type: esp-idf
-    version: 5.2.1
-    platform_version: 6.7.0
     sdkconfig_options:
       CONFIG_ESPTOOLPY_FLASHSIZE_4MB: y
 
@@ -111,7 +109,8 @@ sensor:
     id: "i_temp"
     filters:
       - delta: 0.1
-
+    update_interval: 240s
+    
 external_components:
   - source: github://luar123/zigbee_esphome
     components: [zigbee]
