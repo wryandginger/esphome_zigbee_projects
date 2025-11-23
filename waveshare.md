@@ -7,8 +7,7 @@ They literally watch multiple things, including you.
 Note: This will work on ZHA, but is not working on Z2M without writing your own handler.
 This is also confirmed to NOT work with Hue, Sonoff, and Tuya gateways.
 
-!! Warning: These devices can get chatty!
-
+!! Warning: These devices may be chatty!
 This means they can send a lot of messages via your Zigbee network causing slowness/instability/crashing.
 Adjustments have been made to reduce the amount of network chatter, but you may need to change reporting times or remove zigbee attributes to maintain stability on your setup. The PMS5003 and LD2410 modules (especially in Engineering Mode) are the worst offenders.
 
@@ -35,7 +34,7 @@ If your LD2410B is still stuck, you need to force the device to restart the UART
 6. The device should automatically restart and sensor data should be showing via Zigbee network.
 7. Try again if this fails, but usually once or twice fixes it.
 
-# For [pms.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/pms.yaml) and [panopticon-pms-bsec2.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/panopticon-pms-bsec2.yaml):
+# For [panopticon-pms-bsec2.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/panopticon-pms-bsec2.yaml):
 You will need
 * [ESP32-C6 Dev Kit](https://www.amazon.com/Waveshare-Microcontroller-Development-Single-Core-ESP32-C6-WROOM-1-N8/dp/B0CKR2LF83/) ~$11
 * [HLK-LD2410-B 20GhZ mmWave Sensor with cable](https://www.amazon.com/JESSINIE-HLK-LD2410B-P-Presence-Bluetooth-LD2410B/dp/B0C36FRVHR) ~$11
@@ -45,7 +44,7 @@ You will need
 * DuPont cables and wago connectors  (or some electrical tape)
 * Use the PMSbox.stl and boxlid.stl to print a project box that hides everything neatly. (I recommend printing in Clear PLA)
 
-# For [co2.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/co2.yaml) and [panopticon-co2-bsec2.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/panopticon-co2-bsec2.yaml):
+# For [panopticon-co2-bsec2.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/panopticon-co2-bsec2.yaml):
 You will need
 * [ESP32-C6 Dev Kit](https://www.amazon.com/Waveshare-Microcontroller-Development-Single-Core-ESP32-C6-WROOM-1-N8/dp/B0CKR2LF83/) ~$11
 * [HLK-LD2410-B 20GhZ mmWave Sensor with cable](https://www.amazon.com/JESSINIE-HLK-LD2410B-P-Presence-Bluetooth-LD2410B/dp/B0C36FRVHR) ~$11
@@ -55,7 +54,7 @@ You will need
 * DuPont cables and wago connectors  (or some electrical tape)
 * Use the CO2box.stl and boxlid.stl to print a project box that hides everything neatly. (I recommend printing in Clear PLA)
 
-# For [panopticon-lux.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/panopticon-lux.yaml):
+# For [panopticon-lux-bsec2.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/panopticon-lux-bsec2.yaml):
 You will need
 * [ESP32-C6 Dev Kit](https://www.amazon.com/Waveshare-Microcontroller-Development-Single-Core-ESP32-C6-WROOM-1-N8/dp/B0CKR2LF83/) ~$11
 * [BH1750FVI Lux Sensor](https://www.amazon.com/dp/B0CQ2KBVRM) ~ $4
@@ -65,16 +64,16 @@ You will need
 * Just use the CO2box.stl, everything will fit.
 * I don't know if you really need to use a Lux sensor if you also have an LD2410 module, but they're cheap.
   
-# BSEC2 - [panopticon-pms-bsec2.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/panopticon-pms-bsec2.yaml) and [panopticon-co2-bsec2.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/panopticon-co2-bsec2.yaml)
+# Bosch Sensortec Environmental Cluster 2 (BSEC2) - Copyright and Distribution Notice:
 These files use [Bosch's proprietary BSEC2 libary](https://github.com/boschsensortec/Bosch-BSEC2-Library). These offer IAQ/Air Quality and Sensor accuracy sensors in addition to Temperature, Humidity, Motion, etc.
-The IAQ and Accuracy sensors have been slightly altered from the config examples offered by ESPHome by converting these to percentages.
-The display also shows shorter/more readable AQI interpretations plus sensor accuracy. Display is in a better layout for readability.
+The IAQ and Accuracy sensors have been slightly altered from the config examples offered by ESPHome by converting these to percentages. This makes the zigbee configuration easier to program and allows you to graph the data.
+The display shows the standard AQI and accuracy text.
 
 Using/compiling these files is implicit acceptance of [Bosch's license agreement](https://www.bosch-sensortec.com/media/boschsensortec/downloads/software/bme688_development_software/2024_12/20241219_clickthrough_license_terms_bsec_bme680_bme688_bme690.pdf). ... tl;dr: 
 * Don't use this outside of consumer settings/contexts (no industrial/medical/safety-critical uses). 
 * You may sell a device with this library enabled in firmware, but you may not modify/disassemble/reverse-engineer Bosch's library.
 * Don't give/sell the config to any military or a hostle/embargoed country.
-* This is not legal advice. I am not your lawyer, nor am I your dentist.
+* This is not legal advice and I am not your lawyer, nor am I your geek squad.
 * Compile at your own risk.
 
 
