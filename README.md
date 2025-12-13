@@ -9,6 +9,7 @@ As a rule, you should NEVER trust software updates will work as intended. Always
 
 To save yourself a lot of frustration and anger, you should ALWAYS freeze any working version of ESPHome by using [khendrick's ESPHome legacy addons](https://github.com/khenderick/esphome-legacy-addons)
 (i.e. Before a new monthly release, install the current month's legacy add-on. Doing things this way will allow you beta test future versions until everything can correctly compile on your specialized hardware.)
+If you are having issues with ZHA, take a look at some tips I created: [zhatips.md](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/zhatips.md) 
 
 # Firmware Updates:
 Firmware cannot be sent via Zigbee OTA at this time. Updates only work via USB/UART using the procedure below. You do not need to constantly update your devices on ESPHome, unless there's a compelling reason. 
