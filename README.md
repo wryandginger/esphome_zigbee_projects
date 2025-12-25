@@ -1,8 +1,8 @@
 # Zigbee ESPHome Projects
-This Repo Contains ESPHome YAML configurations and other files that might be useful in building Zigbee devices using ESPHome 2025.11.0
+This Repo Contains ESPHome YAML configurations and other files that might be useful in building Zigbee devices using ESPHome 2025.12.2
 
 # Compatibility Notes: 
-As of 12/13/2025 these configuration files will compile on ESPHome version 2025.11.5, as long as you follow the directions.
+As of 12/25/2025 these configuration files will compile on ESPHome version 2025.12.2, as long as you follow the directions.
 
 Be warned, ESPHome will ALWAYS break non-standard/custom integrations on a new version.
 As a rule, you should NEVER trust software updates will work as intended. Always make several backups (including yaml files, encryption keys, etc.).
@@ -14,12 +14,12 @@ If you are having issues with ZHA, take a look at some tips I created here: [zha
 
 # Firmware Updates:
 Firmware cannot be sent via Zigbee OTA at this time. Updates only work via USB/UART using the procedure below. You do not need to constantly update your devices on ESPHome, unless there's a compelling reason. 
-ESPHome 2025.11.0 is supposed to improve system resource usage and system event processing times. In my anecdotal experience, this version of ESPHome improves network stability.
+For example, ESPHome 2025.11 improves system resource usage and system event processing times.
 
 1. ALWAYS clear build files in ESPHome AND
 2. Fully ERASE the device's flash memory by using the [ESP Tool](https://espressif.github.io/esptool-js/) before you
 3. Update your device's firmware and
-4. Be prepared to delete an re-pair any device you update.
+4. Be prepared to delete and re-pair any device you update.
 
 # Acknowledgements:
 This is made possible by the hard work of @luar123  for the [zigbee_esphome external component.](https://github.com/luar123/zigbee_esphome)
