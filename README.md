@@ -2,7 +2,8 @@
 This Repo Contains ESPHome YAML configurations and other files that might be useful in building Zigbee devices using ESPHome 2025.12.2
 
 # Compatibility Notes: 
-As of 12/25/2025 these configuration files will compile on ESPHome version 2025.12.2, as long as you follow the directions.
+Minimum requirements are ESPHome 2025.7 but this code may not compile correctly on that version.
+As of 2/2/2026 these configuration files will compile on ESPHome version 2026.1.6, as long as you follow the directions.
 
 Be warned, ESPHome will ALWAYS break non-standard/custom integrations on a new version.
 As a rule, you should NEVER trust software updates will work as intended. Always make several backups (including yaml files, encryption keys, etc.).
