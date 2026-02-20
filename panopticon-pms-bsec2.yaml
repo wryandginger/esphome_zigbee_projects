@@ -90,27 +90,6 @@ sensor:
     id: temperature_f
     lambda: return id(temperature).state * 9/5+32;
     update_interval: 120s
-  - platform: template
-    id: qualnum1
-    lambda: |-
-      return static_cast<int>(std::atoi(id(qualnum).state.c_str()));
-    update_interval: 125s
-    on_value:
-      then:
-        - zigbee.setAttr:
-            id: setqual
-            value: !lambda "return x;"
-        - zigbee.report: zb
-  - platform: template
-    id: accunum1
-    lambda: |-
-      return static_cast<int>(std::atoi(id(accunum).state.c_str()));
-    update_interval: 300s
-    on_value:
-      then:
-        - zigbee.setAttr:
-            id: setaccu
-            value: !lambda "return x;"
   - platform: bme68x_bsec2
     temperature:
       name: "BME680 Temperature"
@@ -125,8 +104,11 @@ sensor:
       name: "BME680 Gas Resistance"
       id: gasresist
     iaq:
-      name: "BME68x IAQ"
+      name: "BME680 IAQ"
       id: iaq
+    iaq_accuracy: 
+      name: "BME680 IAQ Accuracy"
+      id: iaqa
 
   - platform: pmsx003
     uart_id: pms_bus
@@ -206,53 +188,6 @@ text_sensor:
       else {
         return {"error"};
       }
-  - platform: template
-    id: qualnum
-    name: "IAQ %"
-    lambda: |-
-      if ( int(id(iaq).state) <= 50) {
-        return {"100"};
-      }
-      else if (int(id(iaq).state) >= 51 && int(id(iaq).state) <= 100) {
-        return {"90"};
-      }
-      else if (int(id(iaq).state) >= 101 && int(id(iaq).state) <= 150) {
-        return {"80"};
-      }
-      else if (int(id(iaq).state) >= 151 && int(id(iaq).state) <= 200) {
-        return {"70"};
-      }
-      else if (int(id(iaq).state) >= 201 && int(id(iaq).state) <= 250) {
-        return {"50"};
-      }
-      else if (int(id(iaq).state) >= 251 && int(id(iaq).state) <= 350) {
-        return {"25"};
-      }
-      else if (int(id(iaq).state) >= 351) {
-        return {"0"};
-      }
-      else {
-        return {"1"};
-      }
-  - platform: template
-    id: accunum
-    name: "Accuracy %"
-    lambda: |-
-      if (id(accuracy).state == "Calibrated") {
-        return {"100"};
-      }
-      else if (id(accuracy).state == "Calibrating") {
-        return {"50"};
-      }
-      else if (id(accuracy).state == "Stabilizing") {
-        return {"2"};
-      }
-      else if (id(accuracy).state == "Uncertain") {
-        return {"25"};
-      }
-      else {
-        return {"1"};
-      }
 
 interval:
   - interval: 205s
@@ -310,7 +245,7 @@ zigbee:
               lambda: !lambda "return x ? 1 : 0;" 
             - attribute_id: 0x0001
               type: 8BIT_ENUM
-              report: true
+              report: false
               value: 0x02
         - id: ILLUMINANCE_MEASUREMENT
           attributes:
@@ -335,7 +270,7 @@ zigbee:
             - attribute_id: 0x001C
               type: CHAR_STRING
               max_length: 6
-              report: true
+              report: false
               value: PM 1.0
             - attribute_id: 0x0051
               type: bool
@@ -348,7 +283,7 @@ zigbee:
             - attribute_id: 0x0075
               type: 16BIT_ENUM
               value: 219
-              report: true
+              report: false
             - attribute_id: 0x006F
               type: 8BITMAP
               value: 0           
@@ -357,7 +292,7 @@ zigbee:
             - attribute_id: 0x001C
               type: CHAR_STRING
               max_length: 6
-              report: true
+              report: false
               value: Motion
             - attribute_id: 0x0051
               type: bool
@@ -418,7 +353,7 @@ zigbee:
             - attribute_id: 0x001C
               type: CHAR_STRING
               max_length: 7
-              report: true
+              report: false
               value: PM 10.0
             - attribute_id: 0x0051
               type: bool
@@ -431,7 +366,7 @@ zigbee:
             - attribute_id: 0x0075
               type: 16BIT_ENUM
               value: 219 # == ohm
-              report: true
+              report: false
             - attribute_id: 0x006F
               type: 8BITMAP
               value: 0
@@ -443,7 +378,7 @@ zigbee:
             - attribute_id: 0
               device: humidity
               type: U16
-              report: true
+              report: false
               value: 100
               scale: 100
         - id: TEMP_MEASUREMENT
@@ -458,7 +393,7 @@ zigbee:
           attributes:
             - attribute_id: 0x0
               type: S16
-              report: true
+              report: false
               value: 0x8000
               device: pressure
         - id:  ANALOG_INPUT
@@ -466,7 +401,7 @@ zigbee:
             - attribute_id: 0x001C
               type: CHAR_STRING
               max_length: 14
-              report: true
+              report: false
               value: Gas Resistance
             - attribute_id: 0x0051
               type: bool
@@ -479,7 +414,7 @@ zigbee:
             - attribute_id: 0x0075
               type: 16BIT_ENUM
               value: 4 # == ohm
-              report: true
+              report: false
             - attribute_id: 0x006F
               type: 8BITMAP
               value: 0
@@ -488,7 +423,7 @@ zigbee:
             - attribute_id: 0x001C
               type: CHAR_STRING
               max_length: 12
-              report: true
+              report: false
               value: Still Target
             - attribute_id: 0x0051
               type: bool
@@ -496,7 +431,7 @@ zigbee:
             - attribute_id: 0x0055
               type: bool
               device: starget
-              report: true
+              report: false
     - num: 5
       device_type: ON_OFF_OUTPUT
       clusters:
@@ -505,7 +440,7 @@ zigbee:
             - attribute_id: 0x001C
               type: CHAR_STRING
               max_length: 5
-              report: true
+              report: false
               value: EMODE
             - attribute_id: 0
               type: bool
@@ -520,7 +455,7 @@ zigbee:
             - attribute_id: 0x001C
               type: CHAR_STRING
               max_length: 5
-              report: true
+              report: false
               value: BMODE
             - attribute_id: 0
               type: bool
@@ -535,7 +470,7 @@ zigbee:
             - attribute_id: 0x001C
               type: CHAR_STRING
               max_length: 3
-              report: true
+              report: false
               value: IAQ
             - attribute_id: 0x0051
               type: bool
@@ -548,7 +483,7 @@ zigbee:
             - attribute_id: 0x0075
               type: 16BIT_ENUM
               value: 95
-              report: true
+              report: false
             - attribute_id: 0x006F
               type: 8BITMAP
               value: 0  
@@ -560,7 +495,7 @@ zigbee:
             - attribute_id: 0x001C
               type: CHAR_STRING
               max_length: 8
-              report: true
+              report: false
               value: Accuracy
             - attribute_id: 0x0051
               type: bool
@@ -568,12 +503,12 @@ zigbee:
             - attribute_id: 0x0055
               type: single
               value: 100
-              id: setaccu
+              device: iaqa
               report: true
             - attribute_id: 0x0075
               type: 16BIT_ENUM
-              value: 98
-              report: true
+              value: 95
+              report: false
             - attribute_id: 0x006F
               type: 8BITMAP
               value: 0     
@@ -585,32 +520,7 @@ zigbee:
             - attribute_id: 0x001C
               type: CHAR_STRING
               max_length: 11
-              report: true
-              value: Air Quality
-            - attribute_id: 0x0051
-              type: bool
-              value: false
-            - attribute_id: 0x0055
-              type: single
-              value: 100
-              id: setqual
-              report: true
-            - attribute_id: 0x0075
-              type: 16BIT_ENUM
-              value: 98
-              report: true
-            - attribute_id: 0x006F
-              type: 8BITMAP
-              value: 0
-    - device_type: SIMPLE_SENSOR
-      num: 10
-      clusters:
-        - id:  ANALOG_INPUT
-          attributes:
-            - attribute_id: 0x001C
-              type: CHAR_STRING
-              max_length: 11
-              report: true
+              report: false
               value: Target Dist
             - attribute_id: 0x0051
               type: bool
@@ -623,7 +533,7 @@ zigbee:
             - attribute_id: 0x0075
               type: 16BIT_ENUM
               value: 118 
-              report: true
+              report: false
             - attribute_id: 0x006F
               type: 8BITMAP
               value: 0
