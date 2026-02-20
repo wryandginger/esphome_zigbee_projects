@@ -1,17 +1,14 @@
 # Zigbee ESPHome Projects
 This Repo Contains ESPHome YAML configurations and other files that might be useful in building Zigbee devices using ESPHome 2026.2.1
 
-M5Stack NanoC6, XIAO C6 MMWave, and ESP32H2 code is compiling fine on 2026.2.1 with no issues, but the Paniopticon code is not correctly compiling at this time.
 
 # BREAKING CHANGE:
-As of 2/20/2026 the Panopticon configuration files will fail to build on the current version of ESPHome.
-The files will compile on ESPHome version 2026.1.6, but the external component needs to be downgraded:
-```yaml
-external_components:
-  - source: github://luar123/zigbee_esphome@a72e4056786646eb5f048dc9030201377bb3b704
-    components: [zigbee]
-```
-I'm working on a fix. It's likely with how I'm dealing with the BSEC sensor data and the general sloppiness of my code.
+This is NOT backwards compatible with older versions of ESPHome, you must use ESPHome 2026.2.1 (or above)
+
+As of 2/20/2026, the XIAO and Waveshare (ESP32C6) files have changed from previous versions. 
+
+To update: Erase your device using the ESP Tool, remove from ZHA, flash the updated config file, then add back to ZHA.
+
 
 # Friendly reminder:
 Be warned, ESPHome will ALWAYS break non-standard/custom integrations on a new version.
@@ -24,7 +21,8 @@ If you are having issues with ZHA, take a look at some tips I created here: [zha
 
 # Firmware Updates:
 Firmware cannot be sent via Zigbee OTA at this time. Updates only work via USB/UART using the procedure below. You do not need to constantly update your devices on ESPHome, unless there's a compelling reason. 
-For example, ESPHome 2025.11 improves system resource usage and system event processing times.
+
+For example, ESPHome 2026.2 improves system resource usage and system event processing times, so it might make your mesh happier.
 
 1. ALWAYS clear build files in ESPHome AND
 2. Fully ERASE the device's flash memory by using the [ESP Tool](https://espressif.github.io/esptool-js/) before you
