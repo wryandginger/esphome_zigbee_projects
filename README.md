@@ -1,10 +1,19 @@
 # Zigbee ESPHome Projects
-This Repo Contains ESPHome YAML configurations and other files that might be useful in building Zigbee devices using ESPHome 2025.12.2
+This Repo Contains ESPHome YAML configurations and other files that might be useful in building Zigbee devices using ESPHome 2026.2.1
 
-# Compatibility Notes: 
-Minimum requirements are ESPHome 2025.7 but this code may not compile correctly on that version.
-As of 2/2/2026 these configuration files will compile on ESPHome version 2026.1.6, as long as you follow the directions.
+M5Stack NanoC6, XIAO C6 MMWave, and ESP32H2 code is compiling fine on 2026.2.1 with no issues, but the Paniopticon code is not correctly compiling at this time.
 
+# BREAKING CHANGE:
+As of 2/20/2026 the Panopticon configuration files will fail to build on the current version of ESPHome.
+The files will compile on ESPHome version 2026.1.6, but the external component needs to be downgraded:
+```yaml
+external_components:
+  - source: github://luar123/zigbee_esphome@a72e4056786646eb5f048dc9030201377bb3b704
+    components: [zigbee]
+```
+I'm working on a fix. It's likely with how I'm dealing with the BSEC sensor data and the general sloppiness of my code.
+
+# Friendly reminder:
 Be warned, ESPHome will ALWAYS break non-standard/custom integrations on a new version.
 As a rule, you should NEVER trust software updates will work as intended. Always make several backups (including yaml files, encryption keys, etc.).
 
