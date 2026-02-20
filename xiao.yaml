@@ -104,7 +104,7 @@ zigbee:
               lambda: !lambda "return x ? 1 : 0;" # perhaps not needed
             - attribute_id: 0x0001
               type: 8BIT_ENUM
-              report: true
+              report: false
               value: 0x02 #0x00 -> PIR; 0x01 -> sonic; 0x02 -> PIR & sonic
         - id: ILLUMINANCE_MEASUREMENT
           attributes:
@@ -119,7 +119,7 @@ zigbee:
             - attribute_id: 0x001C
               type: CHAR_STRING
               max_length: 13
-              report: true
+              report: false
               value: Total Targets
             - attribute_id: 0x0051
               type: bool
@@ -132,7 +132,7 @@ zigbee:
             - attribute_id: 0x0075
               type: 16BIT_ENUM
               value: 95 # == count / no units
-              report: true
+              report: false
             - attribute_id: 0x006F
               type: 8BITMAP
               value: 0
@@ -187,7 +187,7 @@ zigbee:
             - attribute_id: 0x001C
               type: CHAR_STRING
               max_length: 10
-              report: true
+              report: false
               value: Heart Rate
             - attribute_id: 0x0051
               type: bool
@@ -200,7 +200,7 @@ zigbee:
             - attribute_id: 0x0075
               type: 16BIT_ENUM
               value: 100 # == per minute
-              report: true
+              report: false
             - attribute_id: 0x006F
               type: 8BITMAP
               value: 0
@@ -212,7 +212,7 @@ zigbee:
             - attribute_id: 0x001C
               type: CHAR_STRING
               max_length: 11
-              report: true
+              report: false
               value: Breath Rate
             - attribute_id: 0x0051
               type: bool
@@ -225,7 +225,7 @@ zigbee:
             - attribute_id: 0x0075
               type: 16BIT_ENUM
               value: 100 # == per minute
-              report: true
+              report: false
             - attribute_id: 0x006F
               type: 8BITMAP
               value: 0
@@ -237,7 +237,7 @@ zigbee:
             - attribute_id: 0x001C
               type: CHAR_STRING
               max_length: 11
-              report: true
+              report: false
               value: Target Dist
             - attribute_id: 0x0051
               type: bool
@@ -250,7 +250,7 @@ zigbee:
             - attribute_id: 0x0075
               type: 16BIT_ENUM
               value: 118 # == centemeters
-              report: true
+              report: false
             - attribute_id: 0x006F
               type: 8BITMAP
               value: 0
