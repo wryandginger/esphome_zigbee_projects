@@ -42,5 +42,5 @@ Contains instructions for making lights using the M5Stack NanoC6
 Contains instructions for using the XIAO MR60BHA2 60GHz mmWave Human Breathing and Heartbeat Sensor Kit 
 * [waveshare.md](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/waveshare.md) 
 Contains instructions for using the Waveshare ESP32-C6-DEV-KIT-N8 (and likely other makers too) to make multi sensors. (Uses LD2410B, BME680, and generic lux sensors)
-* [esp32H2.md](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/esp32h2.md) 
+* [esp32H2.md](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/esp32H2.md) 
 Contains instructions for a basic router and LED light using a generic [ESP32-H2-DevKitM-1-N4S](https://www.amazon.com/Teyleten-Robot-ESP32-H2-DevKitM-1-N4-ESP32-H2-Development/dp/B0CHP8TS1S/).
