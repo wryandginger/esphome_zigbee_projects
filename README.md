@@ -2,7 +2,7 @@
 This Repo Contains ESPHome YAML configurations and other files that might be useful in building Zigbee devices using ESPHome 2026.2.1
 
 
-# BREAKING CHANGE:
+# Breaking Change:
 This is NOT backwards compatible with older versions of ESPHome, you must use ESPHome 2026.2.1 (or above)
 
 As of 2/20/2026, the XIAO and Waveshare (ESP32C6) files have changed from previous versions. 
@@ -10,7 +10,7 @@ As of 2/20/2026, the XIAO and Waveshare (ESP32C6) files have changed from previo
 To update: Erase your device using the ESP Tool, remove from ZHA, flash the updated config file, then add back to ZHA.
 
 
-# Friendly reminder:
+# Friendly Reminder:
 Be warned, ESPHome will ALWAYS break non-standard/custom integrations on a new version.
 As a rule, you should NEVER trust software updates will work as intended. Always make several backups (including yaml files, encryption keys, etc.).
 
