@@ -47,7 +47,7 @@ zha:
       extra_providers:
         - type: z2m                       # This enables the Zigbee2MQTT firmware update library. 
     ezsp_config:
-      CONFIG_MAX_HOPS: 4                  # 5+ hops cause 3074 errors and increase network interference. 4 is ideal.
+      CONFIG_MAX_HOPS: 30                  # too many hops may increase network interference. 4 can help with dense networks. 30 should be ZHA default.
     ezsp_policies:
       TRUST_CENTER_POLICY: 0x0002         # Allows insecure rejoins for older Philips Hue sensors/switches.
   device_config:                          # This fixes a device I have which reports as a bulb but is really a switch.
@@ -67,7 +67,7 @@ zha:
 * I have read there is a bug in ZHA that causes power reporting devices to flood the network with updates. Disable any of those you don't need/use.
 * Any sensor you are not using is just extra traffic that bogs down your network.
 * Most smart plugs and light bulbs (except Sengled) will work as a repeater, make sure you have a few in each room to strengthen your mesh.
-* Too many dedicated repeaters or the wrong kind of repeater can cause issues (Personally, I avoid using Tuya or Ikea repeater devices.) The ESP32-H2 seems to work fine as a repeater, but its range isn't great.
+* Too many dedicated repeaters or the wrong kind of repeater can cause issues. (Personally, I avoid using Tuya or Ikea repeater devices.) The ESP32-H2 seems to work fine as a repeater, but its range isn't great.
 
 # Use Zigbee Groups for unresponsive lighting
 
@@ -77,6 +77,6 @@ zha:
 
 # Set your Global Options with care
 
-* I don't have enhanced light color enhanced brightness features enabled. They cause stability issues when enabled.
-* I keep the mains and battery power timeouts high. Both of mine are set at 29000 seconds or about 8 hours. Some devices don't do network check-ins frequently.
+* I keep the mains and battery power timeouts high. Mine are set at 8 and 12 hours respectively. Some devices don't do network check-ins frequently.
 * Having a high timeout keeps those devices available on your network.
+* Adjusting the advanced color and brightness settings may help if you are experiencing network instability. 
