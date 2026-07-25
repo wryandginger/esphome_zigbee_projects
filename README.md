@@ -3,12 +3,10 @@ This Repo Contains ESPHome YAML configurations and other files that might be use
 
 
 # Breaking Changes:
-This may not be backwards compatible with older versions of ESPHome, I suggest using ESPHome 2026.2.1 (or above)
+This may not be backwards compatible with older versions of ESPHome, I suggest using ESPHome 2026.6
 
-As of 6/23/2026, these compile on 2026.6.2. These files should work without issues on the current version of ESPHome. 
-
-To update: Erase your device using the ESP Tool, remove from ZHA, flash the updated config file, then add back to ZHA.
-
+As of 7/24/2026, these **DO NOT COMPILE** on ESPHome 2026.7+, you must use ESPHome 2026.6 
+or completely rewrite these configs. (I tried. I failed.)
 
 # Friendly Reminder:
 Be warned, ESPHome will ALWAYS break non-standard/custom integrations on a new version.
