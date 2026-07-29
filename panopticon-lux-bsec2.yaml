@@ -1,7 +1,3 @@
-# Note: The BSEC2 library is only available for use after accepting its software license agreement. 
-# By compiling this configuration, you are explicitly agreeing to the terms of the BSEC license agreement. 
-# https://www.bosch-sensortec.com/media/boschsensortec/downloads/software/bme688_development_software/2024_12/20241219_clickthrough_license_terms_bsec_bme680_bme688_bme690.pdf
-
 esphome:
   name: panopticon-lux-bsec2
   friendly_name: panopticon-lux-bsec2
@@ -30,6 +26,8 @@ uart:
     tx_pin: GPIO21
     rx_pin: GPIO22
     baud_rate: 9600
+    parity: NONE
+    stop_bits: 1
 
 ld2410:
   - uart_id: motion_bus
@@ -239,6 +237,7 @@ globals:
 zigbee:
   id: "zb"
   router: true
+  power_supply: 1
   endpoints:
     - device_type: SIMPLE_SENSOR
       num: 1
@@ -247,19 +246,19 @@ zigbee:
           attributes:
             - id: zb_occupancy 
               attribute_id: 0x000
-              type: 8BITMAP
+              type: MAP8
               report: true
               value: 0
               device: target
               lambda: !lambda "return x ? 1 : 0;" 
             - attribute_id: 0x0001
-              type: 8BIT_ENUM
+              type: ENUM8
               report: false
               value: 0x02 
         - id: BINARY_INPUT
           attributes: 
             - attribute_id: 0x001C
-              type: CHAR_STRING
+              type: STRING
               max_length: 6
               report: false
               value: Motion
@@ -282,10 +281,10 @@ zigbee:
                   - light.control:
                       id: led_1
                       state: !lambda "return (bool)x;"
-        - id: LEVEL_CONTROL
+        - id: LEVEL
           attributes:
             - attribute_id: 0
-              type: U8
+              type: UINT8
               on_value:
                 then:
                   - light.control:
@@ -294,7 +293,7 @@ zigbee:
         - id: COLOR_CONTROL
           attributes:
             - attribute_id: 3
-              type: U16
+              type: UINT16
               on_value:
                 then:
                   - lambda: id(color_x) = (float)x/65536;
@@ -304,7 +303,7 @@ zigbee:
                       green: !lambda "return zigbee::get_g_from_xy(id(color_x), id(color_y));"
                       blue: !lambda "return zigbee::get_b_from_xy(id(color_x), id(color_y));"
             - attribute_id: 4
-              type: U16
+              type: UINT16
               on_value:
                 then:
                   - lambda: id(color_y) = (float)x/65536;
@@ -320,14 +319,14 @@ zigbee:
           attributes:
             - attribute_id: 0
               device: humidity
-              type: U16
+              type: UINT16
               report: true
               value: 100
               scale: 100
-        - id: TEMP_MEASUREMENT
+        - id: TEMPERATURE_MEASUREMENT
           attributes:
             - attribute_id: 0x0
-              type: S16
+              type: UINT16
               report: true
               value: 100
               device: temperature
@@ -335,14 +334,14 @@ zigbee:
         - id: PRESSURE_MEASUREMENT
           attributes:
             - attribute_id: 0x0
-              type: S16
+              type: UINT16
               report: true
               value: 0x8000
               device: pressure
         - id: ILLUMINANCE_MEASUREMENT
           attributes:
             - attribute_id: 0
-              type: U16
+              type: UINT16
               report: true
               value: 0
               device: lux1
@@ -350,7 +349,7 @@ zigbee:
         - id:  ANALOG_INPUT
           attributes:
             - attribute_id: 0x001C
-              type: CHAR_STRING
+              type: STRING
               max_length: 14
               report: false
               value: Gas Resistance
@@ -363,11 +362,11 @@ zigbee:
               value: 100
               report: true
             - attribute_id: 0x0075
-              type: 16BIT_ENUM
+              type: ENUM16
               value: 4 # == ohm
               report: false
             - attribute_id: 0x006F
-              type: 8BITMAP
+              type: MAP8
               value: 0
     - num: 4
       device_type: ON_OFF_OUTPUT
@@ -375,7 +374,7 @@ zigbee:
         - id: ON_OFF
           attributes:
             - attribute_id: 0x001C
-              type: CHAR_STRING
+              type: STRING
               max_length: 5
               report: false
               value: EMODE
@@ -390,7 +389,7 @@ zigbee:
         - id: ON_OFF
           attributes:
             - attribute_id: 0x001C
-              type: CHAR_STRING
+              type: STRING
               max_length: 5
               report: false
               value: BMODE
@@ -405,7 +404,7 @@ zigbee:
         - id:  ANALOG_INPUT
           attributes:
             - attribute_id: 0x001C
-              type: CHAR_STRING
+              type: STRING
               max_length: 11
               report: false
               value: Target Dist
@@ -418,16 +417,16 @@ zigbee:
               value: 0
               device: ddistance
             - attribute_id: 0x0075
-              type: 16BIT_ENUM
+              type: ENUM16
               value: 118 
               report: false
             - attribute_id: 0x006F
-              type: 8BITMAP
+              type: MAP8
               value: 0
         - id: BINARY_INPUT
           attributes: 
             - attribute_id: 0x001C
-              type: CHAR_STRING
+              type: STRING
               max_length: 12
               report: false
               value: Still Target
@@ -444,7 +443,7 @@ zigbee:
         - id:  ANALOG_INPUT
           attributes:
             - attribute_id: 0x001C
-              type: CHAR_STRING
+              type: STRING
               max_length: 3
               report: false
               value: IAQ
@@ -457,11 +456,11 @@ zigbee:
               value: 100
               report: true
             - attribute_id: 0x0075
-              type: 16BIT_ENUM
+              type: ENUM16
               value: 95 
               report: false
             - attribute_id: 0x006F
-              type: 8BITMAP
+              type: MAP8
               value: 0 
     - device_type: SIMPLE_SENSOR
       num: 8
@@ -469,7 +468,7 @@ zigbee:
         - id:  ANALOG_INPUT
           attributes:
             - attribute_id: 0x001C
-              type: CHAR_STRING
+              type: STRING
               max_length: 8
               report: false
               value: Accuracy
@@ -482,9 +481,9 @@ zigbee:
               device: iaqa
               report: true
             - attribute_id: 0x0075
-              type: 16BIT_ENUM
+              type: ENUM16
               value: 95 
               report: false
             - attribute_id: 0x006F
-              type: 8BITMAP
+              type: MAP8
               value: 0 
