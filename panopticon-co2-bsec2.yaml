@@ -1,11 +1,12 @@
-# Note: The BSEC2 library is only available for use after accepting its software license agreement. 
-# By compiling this configuration, you are explicitly agreeing to the terms of the BSEC license agreement. 
-# https://www.bosch-sensortec.com/media/boschsensortec/downloads/software/bme688_development_software/2024_12/20241219_clickthrough_license_terms_bsec_bme680_bme688_bme690.pdf
-
 esphome:
-  name: panopticon-co2
-  friendly_name: Panopticon CO2
-
+  name: panopticon-lux-bsec2
+  friendly_name: panopticon-lux-bsec2
+  on_boot:
+    - priority: 10
+      then:
+        lambda: |-
+          id(bmode).turn_off();       
+          id(emode).turn_off();      
 esp32:
   board: esp32-c6-devkitm-1
   variant: esp32c6
@@ -13,30 +14,24 @@ esp32:
   framework:
     type: esp-idf
 
+      
 i2c:
   sda: GPIO12
   scl: GPIO13
   scan: false
-
-bme68x_bsec2_i2c:
-  address: 0x77
-  model: bme680
-  operating_age: 28d
-  sample_rate: ULP
-  supply_voltage: 3.3V
+  id: bus_1
 
 uart:
   - id: motion_bus
     tx_pin: GPIO21
     rx_pin: GPIO22
     baud_rate: 9600
-  - id: co2_bus
-    tx_pin: GPIO19
-    rx_pin: GPIO18
-    baud_rate: 9600
+    parity: NONE
+    stop_bits: 1
 
 ld2410:
   - uart_id: motion_bus
+
 light:
   - platform: esp32_rmt_led_strip
     rgb_order: RGB
@@ -51,7 +46,6 @@ light:
       - random:
       - flicker:
       - addressable_rainbow:
-          
 binary_sensor:
   - platform: ld2410
     has_target:
@@ -79,73 +73,91 @@ binary_sensor:
       max_length: 20s
       then:
         - zigbee.reset: zb
+
+bme68x_bsec2_i2c:
+  address: 0x77
+  model: bme680
+  operating_age: 28d
+  sample_rate: ULP
+  supply_voltage: 3.3V
+
 sensor:
   - platform: template
-    name: Temperature_F
+    name: Temperature_F  
+    filters:
+        - round: 1
     id: temperature_f
     lambda: return id(temperature).state * 9/5+32;
     update_interval: 120s
-
   - platform: bme68x_bsec2
     temperature:
       name: "BME680 Temperature"
       id: temperature
+      filters:
+        - round: 1
     pressure:
       name: "BME680 Pressure"
       id: pressure
+      filters:
+        - round: 1
     humidity:
       name: "BME680 Humidity"
       id: humidity
+      filters:
+        - round: 1
     gas_resistance:
       name: "BME680 Gas Resistance"
       id: gasresist
+      filters:
+        - round: 1   
     iaq:
-      name: "BME680 IAQ"
+      name: "BME68x IAQ"
       id: iaq
+      filters:
+        - round: 1
     iaq_accuracy: 
       name: "BME680 IAQ Accuracy"
       id: iaqa
 
-  - platform: mhz19
-    id: mhz19s
-    uart_id: co2_bus
-    co2:
-      name: MH-Z19 CO2 Value
-      id: co2
-    temperature:
-      name: MH-Z19 Temperature
-      id: temp2
+  - platform: bh1750
+    name: "BH1750 Illuminance"
+    id: lux1
+    address: 0x23
     update_interval: 120s
+    filters:
+      - round: 1
 
   - platform: ld2410
     light:
       name: light
       id: ldlux
+      filters:
+        - round: 1
     moving_distance:
       name: Moving Distance
       id: mdistance 
+      filters:
+        - round: 1
     still_distance:
       name: Still Distance
       id: sdistance 
+      filters:
+        - round: 1
     moving_energy:
       name: Move Energy
       id: menergy
+      filters:
+        - round: 1
     still_energy:
       name: Still Energy
       id: senergy
+      filters:
+        - round: 1
     detection_distance:
       name: Detection Distance
       id: ddistance
-switch:
-  - platform: ld2410
-    engineering_mode:
-      name: "engineering mode"
-      id: emode
-      restore_mode: RESTORE_DEFAULT_OFF
-    bluetooth:
-      name: "control bluetooth"
-      id: bmode
-      restore_mode: RESTORE_DEFAULT_OFF
+      filters:
+        - round: 1
 
 text_sensor:
   - platform: bme68x_bsec2
@@ -180,7 +192,17 @@ text_sensor:
       else {
         return {"error"};
       }
-    
+
+
+switch:
+  - platform: ld2410
+    engineering_mode:
+      name: "engineering mode" 
+      id: emode
+    bluetooth:
+      name: "control bluetooth" 
+      id: bmode
+
 font:
   - file:
       type: gfonts
@@ -193,10 +215,10 @@ display:
     model: "SSD1306 128x64"
     address: 0x3C
     lambda: |-
-      it.printf(0, 0, id(roboto_14), "%.1f° F / H: %.1f%%",  id(temperature_f).state, id(humidity).state); 
-      it.printf(0, 14, id(roboto_14), "CO2:%.0f / %.0f cm",  id(co2).state, id(ddistance).state); 
-      it.printf(0, 30, id(roboto_14), "IAQ: %.0f   %s" ,  id(iaq).state, id(quality).state.c_str());
-      it.printf(0, 48, id(roboto_14), "%s",  id(accuracy).state.c_str());  
+      it.printf(0, 0, id(roboto_14), "%.0f lux /%.0f hPa",  id(lux1).state, id(pressure).state); 
+      it.printf(0, 14, id(roboto_14), "%.1f°F/%.1f%%",  id(temperature_f).state, id(humidity).state); 
+      it.printf(0, 30, id(roboto_14), "IAQ: %.0f   %s",  id(iaq).state, id(quality).state.c_str());
+      it.printf(0, 48, id(roboto_14), "%s  %.0f cm",  id(accuracy).state.c_str(), id(ddistance).state);  
 
 external_components:
   - source: github://luar123/zigbee_esphome
@@ -215,6 +237,7 @@ globals:
 zigbee:
   id: "zb"
   router: true
+  power_supply: 1
   endpoints:
     - device_type: SIMPLE_SENSOR
       num: 1
@@ -227,7 +250,6 @@ zigbee:
               report: true
               value: 0
               device: target
-              lambda: !lambda "return x ? 1 : 0;" 
             - attribute_id: 0x0001
               type: ENUM8
               report: false
@@ -236,68 +258,16 @@ zigbee:
           attributes: 
             - attribute_id: 0x001C
               type: STRING
-              max_length: 12
+              max_length: 6
               report: false
-              value: Still Target
+              value: Motion
             - attribute_id: 0x0051
               type: bool
-              value: false
+              value: true
             - attribute_id: 0x0055
               type: bool
-              device: starget
-              report: false
-        - id: ILLUMINANCE_MEASUREMENT
-          attributes:
-            - attribute_id: 0
-              type: UINT16
+              device: motion
               report: true
-              value: 0
-              device: ldlux
-              lambda: !lambda "return log10(x)*10000 + 1;"
-        - id: TEMPERATURE_MEASUREMENT
-          attributes:
-            - attribute_id: 0x0
-              type: UINT16
-              report: true
-              value: 100
-              device: temp2
-              scale: 100
-        - id:  CARBON_DIOXIDE_MEASUREMENT
-          attributes:
-            - attribute_id: 0x0000
-              type: SINGLE
-              report: true
-              device: co2
-              scale: 0.000001
-            - attribute_id: 0x0001
-              type: SINGLE
-              value: 0.0
-            - attribute_id: 0x0002
-              type: SINGLE
-              value: 0.01
-        - id:  ANALOG_INPUT
-          attributes:
-            - attribute_id: 0x001C
-              type: STRING
-              max_length: 11
-              report: false
-              value: Target Dist
-            - attribute_id: 0x0051
-              type: bool
-              value: false
-            - attribute_id: 0x0055
-              type: single
-              report: true
-              value: 0
-              device: ddistance
-            - attribute_id: 0x0075
-              type: ENUM16
-              value: 118 
-              report: false
-            - attribute_id: 0x006F
-              type: MAP8
-              value: 0
-              
     - num: 2
       device_type: COLOR_DIMMABLE_LIGHT
       clusters:
@@ -341,47 +311,8 @@ zigbee:
                       red: !lambda "return zigbee::get_r_from_xy(id(color_x), id(color_y));"
                       green: !lambda "return zigbee::get_g_from_xy(id(color_x), id(color_y));"
                       blue: !lambda "return zigbee::get_b_from_xy(id(color_x), id(color_y));"
-    - device_type: SIMPLE_SENSOR
-      num: 3
-      clusters:
-        - id:  ANALOG_INPUT
-          attributes:
-            - attribute_id: 0x001C
-              type: STRING
-              max_length: 3
-              report: false
-              value: IAQ
-            - attribute_id: 0x0051
-              type: bool
-              value: false
-            - attribute_id: 0x0055
-              type: single
-              device: iaq
-              value: 100
-              report: true
-            - attribute_id: 0x0075
-              type: ENUM16
-              value: 95 # == count
-              report: false
-            - attribute_id: 0x006F
-              type: MAP8
-              value: 0
-        - id: BINARY_INPUT
-          attributes: 
-            - attribute_id: 0x001C
-              type: STRING
-              max_length: 6
-              report: false
-              value: Motion
-            - attribute_id: 0x0051
-              type: bool
-              value: false
-            - attribute_id: 0x0055
-              type: bool
-              device: motion
-              report: true
     - device_type: TEMPERATURE_SENSOR
-      num: 4
+      num: 3
       clusters:
         - id: REL_HUMIDITY_MEASUREMENT
           attributes:
@@ -406,6 +337,14 @@ zigbee:
               report: true
               value: 0x8000
               device: pressure
+        - id: ILLUMINANCE_MEASUREMENT
+          attributes:
+            - attribute_id: 0
+              type: UINT16
+              report: true
+              value: 0
+              device: lux1
+              lambda: !lambda "return log10(x)*10000 + 1;"
         - id:  ANALOG_INPUT
           attributes:
             - attribute_id: 0x001C
@@ -428,7 +367,7 @@ zigbee:
             - attribute_id: 0x006F
               type: MAP8
               value: 0
-    - num: 5
+    - num: 4
       device_type: ON_OFF_OUTPUT
       clusters:
         - id: ON_OFF
@@ -443,7 +382,7 @@ zigbee:
               on_value:
                 then:   
                   - switch.turn_on: emode
-    - num: 6
+    - num: 5
       device_type: ON_OFF_OUTPUT
       clusters:
         - id: ON_OFF
@@ -459,7 +398,71 @@ zigbee:
                 then:   
                   - switch.turn_on: bmode
     - device_type: SIMPLE_SENSOR
+      num: 6
+      clusters:
+        - id:  ANALOG_INPUT
+          attributes:
+            - attribute_id: 0x001C
+              type: STRING
+              max_length: 11
+              report: false
+              value: Target Dist
+            - attribute_id: 0x0051
+              type: bool
+              value: false
+            - attribute_id: 0x0055
+              type: single
+              report: true
+              value: 0
+              device: ddistance
+            - attribute_id: 0x0075
+              type: ENUM16
+              value: 118 
+              report: false
+            - attribute_id: 0x006F
+              type: MAP8
+              value: 0
+        - id: BINARY_INPUT
+          attributes: 
+            - attribute_id: 0x001C
+              type: STRING
+              max_length: 12
+              report: false
+              value: Still Target
+            - attribute_id: 0x0051
+              type: bool
+              value: false
+            - attribute_id: 0x0055
+              type: bool
+              device: starget
+              report: true
+    - device_type: SIMPLE_SENSOR
       num: 7
+      clusters:
+        - id:  ANALOG_INPUT
+          attributes:
+            - attribute_id: 0x001C
+              type: STRING
+              max_length: 3
+              report: false
+              value: IAQ
+            - attribute_id: 0x0051
+              type: bool
+              value: false
+            - attribute_id: 0x0055
+              type: single
+              device: iaq
+              value: 100
+              report: true
+            - attribute_id: 0x0075
+              type: ENUM16
+              value: 95 
+              report: false
+            - attribute_id: 0x006F
+              type: MAP8
+              value: 0 
+    - device_type: SIMPLE_SENSOR
+      num: 8
       clusters:
         - id:  ANALOG_INPUT
           attributes:
@@ -478,8 +481,8 @@ zigbee:
               report: true
             - attribute_id: 0x0075
               type: ENUM16
-              value: 95
+              value: 95 
               report: false
             - attribute_id: 0x006F
               type: MAP8
-              value: 0     
+              value: 0 
