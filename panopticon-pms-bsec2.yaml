@@ -11,13 +11,14 @@ esphome:
         lambda: |-
           id(bmode).turn_off();
           id(emode).turn_off();
-
+  
 esp32:
   board: esp32-c6-devkitm-1
   variant: esp32c6
   partitions: partitions_zb.csv
   framework:
     type: esp-idf
+    
 
 i2c:
   sda: GPIO12
@@ -25,14 +26,21 @@ i2c:
   scan: false
   
 uart:
-  - id: motion_bus
-    tx_pin: GPIO21
-    rx_pin: GPIO22
-    baud_rate: 9600
   - id: pms_bus
     tx_pin: GPIO19
     rx_pin: GPIO18
     baud_rate: 9600
+    parity: NONE
+    stop_bits: 1
+    
+  - id: motion_bus
+    tx_pin: GPIO21
+    rx_pin: GPIO22
+    baud_rate: 9600
+    parity: NONE
+    stop_bits: 1
+ 
+    
 ld2410:
   - uart_id: motion_bus
 light:
@@ -76,7 +84,7 @@ binary_sensor:
       max_length: 20s
       then:
         - zigbee.reset: zb
-
+    
 bme68x_bsec2_i2c:
   address: 0x77
   model: bme680
