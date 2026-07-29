@@ -1,6 +1,6 @@
 esphome:
-  name: m5stackc6-ws2812-zb
-  friendly_name: M5Stack NanoC6 WS2812 (66 LED) ZB
+  name: m5stack-nanoc6-lightstrip-zb50
+  friendly_name: M5Stack NanoC6 WS2812 (50 LED) ZB
 
 esp32:
   board: esp32-c6-devkitm-1
@@ -31,7 +31,7 @@ binary_sensor:
     on_press: 
         - light.turn_on:
             id: ledstrip
-            effect: random
+            effect: BlueGradient
     on_double_click: 
         - light.turn_on:
             id: ledstrip
@@ -47,7 +47,7 @@ binary_sensor:
       then:
         - light.turn_on:
             id: ledstrip
-            effect: scan
+            effect: RedGradient
     - timing:
         - ON for at least 3s
         - OFF for at least 1s
@@ -55,22 +55,26 @@ binary_sensor:
         - OFF for at least 1s
       then:
         - zigbee.reset: zb
+    - timing:
+        - ON for at least 5s
+      then:
+        - light.turn_off:
+            id: ledstrip
 
 light:
   - platform: esp32_rmt_led_strip
     chipset: WS2812
     pin: GPIO01
-    num_leds: 66
-    rgb_order: RGB
+    num_leds: 50
+    rgb_order: GRB
     rmt_symbols: 48
     name: "LED Strip"
     id: "ledstrip"
     effects:
-      - random:
-      - flicker:
-      - addressable_rainbow:   
-      - addressable_scan:
-          scan_width: 10
+      - flicker
+      - addressable_rainbow:
+           speed: 3
+           width: 100
       - addressable_twinkle:
           twinkle_probability: 35%
           progress_interval: 6ms
@@ -82,9 +86,66 @@ light:
           spark_probability: 40%
           use_random_color: true
           fade_out_rate: 74
-      - addressable_flicker:  
-          update_interval: 5ms
-          intensity: 33%                      
+      - addressable_color_wipe:
+          name: "BlueGradient"
+          colors:
+            - red: 0%
+              green: 0%
+              blue: 100%  
+              num_leds: 10
+              gradient: true
+            - red: 0%
+              green: 100%
+              blue: 100%   
+              num_leds: 10
+              gradient: true
+            - red: 100%
+              green: 0%
+              blue: 100%   
+              num_leds: 15
+              gradient: true
+            - red: 0%
+              green: 100%
+              blue: 100%   
+              num_leds: 10
+              gradient: true
+            - red: 0%
+              green: 0%
+              blue: 60%   
+              num_leds: 2
+              gradient: true
+          add_led_interval: 250ms
+          reverse: true
+      - addressable_color_wipe:
+          name: "RedGradient"
+          colors:
+            - red: 100%
+              green: 91%
+              blue: 0%  
+              num_leds: 10
+              gradient: true
+            - red: 100%
+              green: 6%
+              blue: 18%   
+              num_leds: 10
+              gradient: true
+            - red: 100%
+              green: 63%
+              blue: 0%   
+              num_leds: 15
+              gradient: true
+            - red: 100%
+              green: 60%
+              blue: 18%   
+              num_leds: 10
+              gradient: true
+            - red: 100%
+              green: 0%
+              blue: 0%   
+              num_leds: 2
+              gradient: true
+          add_led_interval: 250ms
+          reverse: true
   - platform: esp32_rmt_led_strip
     rgb_order: GRB
     pin: GPIO20
@@ -128,6 +189,7 @@ globals:
 zigbee:
   id: "zb"
   router: true
+  power_supply: 1
   endpoints:
     - num: 1
       device_type: COLOR_DIMMABLE_LIGHT
@@ -142,10 +204,10 @@ zigbee:
                   - light.control:
                       id: ledstrip
                       state: !lambda "return (bool)x;"
-        - id: LEVEL_CONTROL
+        - id: LEVEL
           attributes:
             - attribute_id: 0
-              type: U8
+              type: UINT8
               value: 255
               on_value:
                 then:
@@ -155,7 +217,7 @@ zigbee:
         - id: COLOR_CONTROL
           attributes:
             - attribute_id: 3
-              type: U16
+              type: UINT16
               on_value:
                 then:
                   - lambda: id(color_x) = (float)x/65536;
@@ -165,7 +227,7 @@ zigbee:
                       green: !lambda "return zigbee::get_g_from_xy(id(color_x), id(color_y));"
                       blue: !lambda "return zigbee::get_b_from_xy(id(color_x), id(color_y));"
             - attribute_id: 4
-              type: U16
+              type: UINT16
               on_value:
                 then:
                   - lambda: id(color_y) = (float)x/65536;
@@ -187,10 +249,10 @@ zigbee:
                   - light.control:
                       id: button_light
                       state: !lambda "return (bool)x;"
-        - id: LEVEL_CONTROL
+        - id: LEVEL
           attributes:
             - attribute_id: 0
-              type: U8
+              type: UINT8
               value: 255
               on_value:
                 then:
@@ -200,7 +262,7 @@ zigbee:
         - id: COLOR_CONTROL
           attributes:
             - attribute_id: 3
-              type: U16
+              type: UINT16
               on_value:
                 then:
                   - lambda: id(color_x) = (float)x/65536;
@@ -210,7 +272,7 @@ zigbee:
                       green: !lambda "return zigbee::get_g_from_xy(id(color_x), id(color_y));"
                       blue: !lambda "return zigbee::get_b_from_xy(id(color_x), id(color_y));"
             - attribute_id: 4
-              type: U16
+              type: UINT16
               on_value:
                 then:
                   - lambda: id(color_y) = (float)x/65536;
@@ -231,10 +293,10 @@ zigbee:
                   - light.control:
                       id: blueled
                       state: !lambda "return (bool)x;"
-        - id: LEVEL_CONTROL
+        - id: LEVEL
           attributes:
             - attribute_id: 0
-              type: U8
+              type: UINT8
               value: 255
               on_value:
                 then:
@@ -244,10 +306,10 @@ zigbee:
     - device_type: TEMPERATURE_SENSOR
       num: 4
       clusters:
-        - id: TEMP_MEASUREMENT
+        - id: TEMPERATURE_MEASUREMENT
           attributes:
             - attribute_id: 0
-              type: S16
+              type: UINT16
               report: true
               value: 100
               device: i_temp
@@ -267,7 +329,7 @@ zigbee:
                       then: 
                         - light.turn_on:
                             id: ledstrip
-                            effect: random
+                            effect: BlueGradient
                         - zigbee.setAttr:
                             id: led_strip1
                             value: !lambda "return (bool)x;"
@@ -392,7 +454,7 @@ zigbee:
                       then: 
                         - light.turn_on:
                             id: ledstrip
-                            effect: scan
+                            effect: RedGradient
                         - zigbee.setAttr:
                             id: led_strip1
                             value: !lambda "return (bool)x;"
@@ -402,3 +464,4 @@ zigbee:
                         - zigbee.setAttr:
                             id: led_strip1
                             value: !lambda "return (bool)x;"   
+    
