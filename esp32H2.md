@@ -64,10 +64,10 @@ zigbee:
                   - light.control:
                       id: led1
                       state: !lambda "return x;"
-        - id: LEVEL_CONTROL
+        - id: LEVEL
           attributes:
             - attribute_id: 0
-              type: U8
+              type: UINT8
               value: 255
               on_value:
                 then:
@@ -77,7 +77,7 @@ zigbee:
         - id: COLOR_CONTROL
           attributes:
             - attribute_id: 3
-              type: U16
+              type: UINT16
               on_value:
                 then:
                   - lambda: id(color_x) = (float)x/65536;
@@ -87,7 +87,7 @@ zigbee:
                       green: !lambda "return zigbee::get_g_from_xy(id(color_x), id(color_y));"
                       blue: !lambda "return zigbee::get_b_from_xy(id(color_x), id(color_y));"
             - attribute_id: 4
-              type: U16
+              type: UINT16
               on_value:
                 then:
                   - lambda: id(color_y) = (float)x/65536;
