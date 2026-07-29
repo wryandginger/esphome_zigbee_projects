@@ -1,12 +1,10 @@
 # Zigbee ESPHome Projects
-This Repo Contains ESPHome YAML configurations and other files that might be useful in building Zigbee devices using ESPHome 2026.2.1+
+This Repo Contains ESPHome YAML configurations and other files that might be useful in building Zigbee devices using ESPHome 2026.7.3+
 
 
 # Breaking Changes:
-This may not be backwards compatible with older versions of ESPHome, I suggest using ESPHome 2026.6
-
-As of 7/24/2026, these **DO NOT COMPILE** on ESPHome 2026.7+, you must use ESPHome 2026.6 
-or completely rewrite these configs. (I tried. I failed.)
+This is NOT backwards compatible with older versions of ESPHome
+As of 7/29/2026, these **ONLY COMPILE** on ESPHome 2026.7.3, you must use this version or newer.
 
 # Friendly Reminder:
 Be warned, ESPHome will ALWAYS break non-standard/custom integrations on a new version.
