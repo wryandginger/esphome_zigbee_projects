@@ -88,28 +88,29 @@ globals:
 
 zigbee:
   id: "zb"
-  router: true
+  router: false    # XIAO Devices have TERRIBLE radios and will never route.
+  power_supply: 1
   endpoints:
     - device_type: SIMPLE_SENSOR
       num: 1
       clusters:
         - id: OCCUPANCY_SENSING
           attributes:
-            - id: zb_occupancy # actual state as bit. 0 -> empty; 1 -> occupied 
+            - id: zb_occupancy  
               attribute_id: 0x000
-              type: 8BITMAP
+              type: MAP8
               report: true
               value: 0
               device: sensor_occupancy
-              lambda: !lambda "return x ? 1 : 0;" # perhaps not needed
+              lambda: !lambda "return x ? 1 : 0;"
             - attribute_id: 0x0001
-              type: 8BIT_ENUM
+              type: ENUM8
               report: false
-              value: 0x02 #0x00 -> PIR; 0x01 -> sonic; 0x02 -> PIR & sonic
+              value: 0x01 #0x00 -> PIR; 0x01 -> sonic; 0x02 -> PIR & sonic
         - id: ILLUMINANCE_MEASUREMENT
           attributes:
             - attribute_id: 0
-              type: U16
+              type: UINT16
               report: true
               value: 0
               lambda: !lambda "return log10(x)*10000 + 1;"
@@ -117,7 +118,7 @@ zigbee:
         - id:  ANALOG_INPUT
           attributes:
             - attribute_id: 0x001C
-              type: CHAR_STRING
+              type: STRING
               max_length: 13
               report: false
               value: Total Targets
@@ -130,11 +131,11 @@ zigbee:
               value: 100
               report: true
             - attribute_id: 0x0075
-              type: 16BIT_ENUM
+              type: ENUM16
               value: 95 # == count / no units
               report: false
             - attribute_id: 0x006F
-              type: 8BITMAP
+              type: MAP8
               value: 0
     - num: 2
       device_type: COLOR_DIMMABLE_LIGHT
@@ -148,10 +149,10 @@ zigbee:
                   - light.control:
                       id: led_1
                       state: !lambda "return (bool)x;"
-        - id: LEVEL_CONTROL
+        - id: LEVEL
           attributes:
             - attribute_id: 0
-              type: U8
+              type: UINT8
               on_value:
                 then:
                   - light.control:
@@ -160,7 +161,7 @@ zigbee:
         - id: COLOR_CONTROL
           attributes:
             - attribute_id: 3
-              type: U16
+              type: UINT16
               on_value:
                 then:
                   - lambda: id(color_x) = (float)x/65536;
@@ -170,7 +171,7 @@ zigbee:
                       green: !lambda "return zigbee::get_g_from_xy(id(color_x), id(color_y));"
                       blue: !lambda "return zigbee::get_b_from_xy(id(color_x), id(color_y));"
             - attribute_id: 4
-              type: U16
+              type: UINT16
               on_value:
                 then:
                   - lambda: id(color_y) = (float)x/65536;
@@ -185,7 +186,7 @@ zigbee:
         - id:  ANALOG_INPUT
           attributes:
             - attribute_id: 0x001C
-              type: CHAR_STRING
+              type: STRING
               max_length: 10
               report: false
               value: Heart Rate
@@ -198,11 +199,11 @@ zigbee:
               value: 100
               report: true
             - attribute_id: 0x0075
-              type: 16BIT_ENUM
+              type: ENUM16
               value: 100 # == per minute
               report: false
             - attribute_id: 0x006F
-              type: 8BITMAP
+              type: MAP8
               value: 0
     - device_type: SIMPLE_SENSOR
       num: 4
@@ -210,7 +211,7 @@ zigbee:
         - id:  ANALOG_INPUT
           attributes:
             - attribute_id: 0x001C
-              type: CHAR_STRING
+              type: STRING
               max_length: 11
               report: false
               value: Breath Rate
@@ -223,11 +224,11 @@ zigbee:
               value: 100
               report: true
             - attribute_id: 0x0075
-              type: 16BIT_ENUM
+              type: ENUM16
               value: 100 # == per minute
               report: false
             - attribute_id: 0x006F
-              type: 8BITMAP
+              type: MAP8
               value: 0
     - device_type: SIMPLE_SENSOR
       num: 5
@@ -235,7 +236,7 @@ zigbee:
         - id:  ANALOG_INPUT
           attributes:
             - attribute_id: 0x001C
-              type: CHAR_STRING
+              type: STRING
               max_length: 11
               report: false
               value: Target Dist
@@ -248,11 +249,11 @@ zigbee:
               value: 0
               device: distance
             - attribute_id: 0x0075
-              type: 16BIT_ENUM
+              type: ENUM16
               value: 118 # == centemeters
               report: false
             - attribute_id: 0x006F
-              type: 8BITMAP
+              type: MAP8
               value: 0
 
 button:
