@@ -250,7 +250,6 @@ zigbee:
               report: true
               value: 0
               device: target
-              lambda: !lambda "return x ? 1 : 0;" 
             - attribute_id: 0x0001
               type: ENUM8
               report: false
