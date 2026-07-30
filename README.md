@@ -2,12 +2,24 @@
 This Repo Contains ESPHome YAML configurations and other files that might be useful in building Zigbee devices using ESPHome 2026.7.3+
 
 
-# Breaking Changes:
+# 🚨 Breaking Changes:
 This is NOT backwards compatible with older versions of ESPHome
-As of 7/29/2026, these **ONLY COMPILE** on ESPHome 2026.7.3, you must use this version or newer.
+As of 7/29/2026, these **ONLY** compile on ESPHome 2026.7.3, you must use this version or newer.
+
+## ❓ Planning to update? 
+If you have already compiled an older version and your devices are working: 
+
+**🛑 STOP: DO NOT FLASH THIS FIRMWARE AT THIS TIME!**
+
+ESPHome 2026.7+ changes the required syntax for Zigbee operations. In this change, all of my devices that use 2 UART components are no longer working as expected. (e.g. MHZ-19 or PMS500X devices **with** LD2410 Motion Sensing)
+Specifically, the OCCUPANCY_SENSING is completely broken and does not trigger unless you manually poll the cluster. This problem can be bypassed by adding a Binary_Sensor for the LD2410 has_target to any device that doesn't already have a binary sensor. These devices also seem to be causing cascade Zigbee network failures. I'm presently investigating the problem and I'm testing several fixes. For now, if you have working sensors just wait. 
+
+Please, practice gratitude; you have working sensors (that's mostly a note for myself 🤦‍♂️).
+
+**The XIAO, H2, M5Stack, and Panopticon Lux devices appear to work fine, but I'm not convinced they are stable yet. Flash at your own risk.**
 
 # Friendly Reminder:
-Be warned, ESPHome will ALWAYS break non-standard/custom integrations on a new version.
+Be warned, ESPHome will **ALWAYS** break non-standard/custom integrations on a new version.
 As a rule, you should NEVER trust software updates will work as intended. Always make several backups (including yaml files, encryption keys, etc.).
 
 To save yourself a lot of frustration and anger, you should ALWAYS freeze any working version of ESPHome by using [khendrick's ESPHome legacy addons](https://github.com/khenderick/esphome-legacy-addons)
@@ -23,7 +35,7 @@ For example, ESPHome 2026.2 improves system resource usage and system event proc
 1. ALWAYS clear build files in ESPHome AND
 2. Fully ERASE the device's flash memory by using the [ESP Tool](https://espressif.github.io/esptool-js/) before you
 3. Update your device's firmware and
-4. Be prepared to delete and re-pair any device you update.
+4. ALWAYS delete and re-pair any device you update.
 
 # Acknowledgements:
 This is made possible by the hard work of @luar123  for the [zigbee_esphome external component.](https://github.com/luar123/zigbee_esphome)
