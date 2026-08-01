@@ -31,9 +31,8 @@ Because this is a waterproof LED string, you can put these in a damp location IF
 # Install Instructions
 
 1. Once you have your materials, connect your LED strip to the Grove cable, and the cable to the module. (For WS2182 and BME280, cut the grove cable in half and connect your 5V, GND, and data pins to the red, black, and yellow grove cables.
-2. Go to github and download [partitions_zb.csv](https://github.com/luar123/zigbee_esphome/blob/8ee9eaaabacd722b3689690a91485f35514518ec/partitions_zb.csv)  then place in /config/esphome
-3. Prep your device in esphome. I usually just select ESP32-C6 and skip everything.
-4. Replace the new YAML file with the desired config from this repo and build your project.
+2. Prep your device in esphome. I usually just select ESP32-C6 and skip everything.
+3. Replace the new YAML file with the desired config from this repo and build your project.
    Note: No WiFi or OTA are available so any flashing has to be done via USB. Press and hold the button as you plug in the USB cable if you need to get into the bootloader.
 
 
