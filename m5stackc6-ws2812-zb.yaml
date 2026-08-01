@@ -5,7 +5,6 @@ esphome:
 esp32:
   board: esp32-c6-devkitm-1
   variant: esp32c6
-  partitions: partitions_zb.csv
   framework:
     type: esp-idf
     sdkconfig_options:
@@ -188,7 +187,7 @@ globals:
 
 zigbee:
   id: "zb"
-  router: true
+  router: true 
   power_supply: 1
   endpoints:
     - num: 1
@@ -303,18 +302,7 @@ zigbee:
                   - light.control:
                       id: blueled
                       brightness: !lambda "return ((float)x)/255;"      
-    - device_type: TEMPERATURE_SENSOR
-      num: 4
-      clusters:
-        - id: TEMPERATURE_MEASUREMENT
-          attributes:
-            - attribute_id: 0
-              type: UINT16
-              report: true
-              value: 100
-              device: i_temp
-              scale: 100
-    - num: 5
+    - num: 4
       device_type: ON_OFF_OUTPUT
       clusters:
         - id: ON_OFF
@@ -339,7 +327,7 @@ zigbee:
                         - zigbee.setAttr:
                             id: led_strip1
                             value: !lambda "return (bool)x;"         
-    - num: 6
+    - num: 5
       device_type: ON_OFF_OUTPUT
       clusters:
         - id: ON_OFF
@@ -364,7 +352,7 @@ zigbee:
                         - zigbee.setAttr:
                             id: led_strip1
                             value: !lambda "return (bool)x;"              
-    - num: 7
+    - num: 6
       device_type: ON_OFF_OUTPUT
       clusters:
         - id: ON_OFF
@@ -389,7 +377,7 @@ zigbee:
                         - zigbee.setAttr:
                             id: led_strip1
                             value: !lambda "return (bool)x;"         
-    - num: 8
+    - num: 7
       device_type: ON_OFF_OUTPUT
       clusters:
         - id: ON_OFF
@@ -414,7 +402,7 @@ zigbee:
                         - zigbee.setAttr:
                             id: led_strip1
                             value: !lambda "return (bool)x;"         
-    - num: 9
+    - num: 8
       device_type: ON_OFF_OUTPUT
       clusters:
         - id: ON_OFF
@@ -439,7 +427,7 @@ zigbee:
                         - zigbee.setAttr:
                             id: led_strip1
                             value: !lambda "return (bool)x;"        
-    - num: 10
+    - num: 9
       device_type: ON_OFF_OUTPUT
       clusters:
         - id: ON_OFF
