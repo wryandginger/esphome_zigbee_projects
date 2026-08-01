@@ -7,9 +7,9 @@ They literally watch multiple things, including you.
 Note: This will work on ZHA, but is not working on Z2M without writing your own handler.
 This is also confirmed to NOT work with Hue, Sonoff, and Tuya gateways.
 
-!! Warning: These devices may be chatty!
+## Warning: These devices are chatty!
 This means they can send a lot of messages via your Zigbee network causing slowness/instability/crashing.
-Adjustments have been made to reduce the amount of network chatter, but you may need to change reporting times or remove zigbee attributes to maintain stability on your setup. The PMS5003 and LD2410 modules (especially in Engineering Mode) are the worst offenders.
+Throttles have been added to limit the amount of network chatter, but you may need to remove Zigbee attributes to maintain stability on your setup. The PMS5003 and LD2410 modules (especially in Engineering Mode) are the worst offenders.
 
 # Troubleshooting Zigbee Network Crashing
 If your Zigbee network crashes, reports RF interference, or constantly re-initializes: 
@@ -23,7 +23,7 @@ If your Zigbee network crashes, reports RF interference, or constantly re-initia
 
 # Troubleshooting Stuck Motion Sensors
 On a reboot or after a power loss, the LD2410B module will occasionally stop communicating with the board. This results in no updated sensor data or "nan" for target distance.
-Try turning on/off the bluetooth and engineering mode switches via zigbee. This sometimes fixes things.
+Try turning on/off the bluetooth and engineering mode switches via Zigbee. This sometimes fixes things.
 
 If your LD2410B is still stuck, you need to force the device to restart the UART bus:
 1. Download HiLink's HLKRadarTool app
@@ -84,9 +84,8 @@ Using/compiling these files is implicit acceptance of [Bosch's license agreement
 4. Connect the LD2410 with tx_pin: GPIO21 rx_pin: GPIO22 and out_pin: GPIO11
 5. Connect the PMS or CO2 sensor with  tx_pin: GPIO19 rx_pin: GPIO18 (and set_pin GPIO11 for the PMS)
 4. Plug a USB-C cable into the ESP32-C6 module.
-5. Go to github and download partitions_zb.csv then place in /config/esphome
-6. Prep your device in esphome. I usually just select ESP32-C6 and skip everything.
-7. Replace the new YAML file with the desired config from this repo and build your project. Note: No WiFi or OTA are available so any flashing has to be done via USB. Press and hold the button as you plug in the USB cable if you need to get into the bootloader.
+5. Prep your device in esphome. I usually just select ESP32-C6 and skip everything.
+6. Replace the new YAML file with the desired config from this repo and build your project. Note: No WiFi or OTA are available so any flashing has to be done via USB. Press and hold the button as you plug in the USB cable if you need to get into the bootloader.
 
 Pro-Tip: You only need to keep one YAML file in ESPHome per device model/configuration that you're deploying on your network.
 
