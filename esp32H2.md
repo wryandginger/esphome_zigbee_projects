@@ -25,7 +25,6 @@ esphome:
 esp32:
   board: esp32-h2-devkitm-1
   flash_size: 4MB
-  partitions: partitions_zb.csv
   framework:
     type: esp-idf
     sdkconfig_options:
