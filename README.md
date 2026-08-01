@@ -6,17 +6,22 @@ This Repo Contains ESPHome YAML configurations and other files that might be use
 This is NOT backwards compatible with older versions of ESPHome
 As of 7/29/2026, these **ONLY** compile on ESPHome 2026.7.3, you must use this version or newer.
 
+## 🆕 Starting from scratch? 
+If you don't have any sensors built yet, feel free to follow these guides. 
+
+If you have some experience with ESPHome, you might want to just jump to luar123's [zigbee_esphome external component.](https://github.com/luar123/zigbee_esphome) and use the basic mode.
+
 ## ❓ Planning to update? 
 If you have already compiled an older version and your devices are working: 
 
-**🛑 STOP: DO NOT FLASH THIS FIRMWARE AT THIS TIME!**
+### ⚠️ Proceed with Caution!
+First, please practice gratitude; you have working sensors. If you're **really sure** you want to risk not having working sensors, then proceed. (This is totally a note for myself 🤦‍♂️).
 
-ESPHome 2026.7+ changes the required syntax for Zigbee operations. In this change, all of my devices that use 2 UART components are no longer working as expected. (e.g. MHZ-19 or PMS500X devices **with** LD2410 Motion Sensing)
-Specifically, the OCCUPANCY_SENSING is completely broken and does not trigger unless you manually poll the cluster. This problem can be bypassed by adding a Binary_Sensor for the LD2410 has_target to any device that doesn't already have a binary sensor. These devices also seem to be causing cascade Zigbee network failures. I'm presently investigating the problem and I'm testing several fixes. For now, if you have working sensors just wait. 
+ESPHome 2026.7+ and updates to the Zigbee external component switches to a newer Zigbee SDK (ZBOSS -> ESP Zigbee 2.0). All of the configuration files had to change to accommodate this change. To improve network stability, most non-motion sensors have a hard throttle of 120 seconds.
 
-Please, practice gratitude; you have working sensors (that's mostly a note for myself 🤦‍♂️).
+This means sensors have been rearranged, endpoints are a little different, and the partitions file is no longer required. You will probably need to change automations or purge sensor data.
 
-**The XIAO, H2, M5Stack, and Panopticon Lux devices appear to work fine, but I'm not convinced they are stable yet. Flash at your own risk.**
+I have only been testing these configurations for a few hours. There may be stability issues. Flash at your own risk.
 
 # Friendly Reminder:
 Be warned, ESPHome will **ALWAYS** break non-standard/custom integrations on a new version.
