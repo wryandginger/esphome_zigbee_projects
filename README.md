@@ -17,7 +17,7 @@ If you have already compiled an older version and your devices are working:
 ### ⚠️ Proceed with Caution!
 First, please practice gratitude; you have working sensors. If you're **really sure** you want to risk not having working sensors, then proceed. (This is totally a note for myself 🤦‍♂️).
 
-ESPHome 2026.7+ and updates to the Zigbee external component switches to a newer Zigbee SDK (ZBOSS -> ESP Zigbee 2.0). All of the configuration files had to change to accommodate this change. To improve network stability, most non-motion sensors have a hard throttle of 120 seconds.
+ESPHome 2026.7+ and updates to the Zigbee external component switches to a newer Zigbee SDK (ZBOSS -> ESP Zigbee SDK 2.0). All of the configuration files had to change to accommodate this change. To improve network stability, most non-motion sensors have a hard throttle of 120 seconds.
 
 This means sensors have been rearranged, endpoints are a little different, and the partitions file is no longer required. You will probably need to change automations or purge sensor data.
 
