@@ -1,19 +1,12 @@
 esphome:
   name: panopticon-lux-bsec2
   friendly_name: panopticon-lux-bsec2
-  on_boot:
-    - priority: 10
-      then:
-        lambda: |-
-          id(bmode).turn_off();       
-          id(emode).turn_off();      
+    
 esp32:
   board: esp32-c6-devkitm-1
   variant: esp32c6
-  partitions: partitions_zb.csv
   framework:
     type: esp-idf
-
       
 i2c:
   sda: GPIO12
@@ -51,6 +44,14 @@ binary_sensor:
     has_target:
       name: Target
       id: target
+      on_press:   
+        then:
+          - zigbee.setAttr: { id: zb_occupancy, value: 1 }
+          - zigbee.reportAttr: "zb_occupancy"
+      on_release: 
+        then:
+          - zigbee.setAttr: { id: zb_occupancy, value: 0 }
+          - zigbee.reportAttr: "zb_occupancy"
     has_moving_target:
       name: Moving Target
       id: motion
@@ -84,81 +85,107 @@ bme68x_bsec2_i2c:
 sensor:
   - platform: template
     name: Temperature_F  
-    filters:
-        - round: 1
     id: temperature_f
     lambda: return id(temperature).state * 9/5+32;
-    update_interval: 120s
+    accuracy_decimals: 2
+    filters:
+        - round: 2
+        - throttle: 120s
   - platform: bme68x_bsec2
     temperature:
       name: "BME680 Temperature"
       id: temperature
+      accuracy_decimals: 2
       filters:
-        - round: 1
+        - round: 2
+        - throttle: 120s
     pressure:
       name: "BME680 Pressure"
       id: pressure
+      accuracy_decimals: 2
       filters:
-        - round: 1
+        - round: 2
+        - throttle: 120s
     humidity:
       name: "BME680 Humidity"
       id: humidity
+      accuracy_decimals: 2
       filters:
-        - round: 1
+        - round: 2
+        - throttle: 120s
     gas_resistance:
       name: "BME680 Gas Resistance"
       id: gasresist
+      accuracy_decimals: 2
       filters:
-        - round: 1   
+        - round: 2
+        - throttle: 120s  
     iaq:
       name: "BME68x IAQ"
       id: iaq
+      accuracy_decimals: 2
       filters:
-        - round: 1
+        - round: 2
+        - throttle: 120s
     iaq_accuracy: 
       name: "BME680 IAQ Accuracy"
       id: iaqa
-
+      accuracy_decimals: 0
+      filters:
+        - round: 0
+        - throttle: 120s
   - platform: bh1750
     name: "BH1750 Illuminance"
     id: lux1
     address: 0x23
-    update_interval: 120s
+    accuracy_decimals: 2
     filters:
-      - round: 1
+        - round: 2
+        - throttle: 120s
 
   - platform: ld2410
     light:
       name: light
       id: ldlux
+      accuracy_decimals: 2
       filters:
-        - round: 1
+        - round: 2
+        - throttle: 120s
     moving_distance:
       name: Moving Distance
       id: mdistance 
+      accuracy_decimals: 2
       filters:
-        - round: 1
+        - round: 2
+        - throttle: 120s
     still_distance:
       name: Still Distance
       id: sdistance 
+      accuracy_decimals: 2
       filters:
-        - round: 1
+        - round: 2
+        - throttle: 120s
     moving_energy:
       name: Move Energy
       id: menergy
+      accuracy_decimals: 2
       filters:
-        - round: 1
+        - round: 2
+        - throttle: 120s
     still_energy:
       name: Still Energy
       id: senergy
+      accuracy_decimals: 2
       filters:
-        - round: 1
+        - round: 2
+        - throttle: 120s
     detection_distance:
       name: Detection Distance
       id: ddistance
+      accuracy_decimals: 2
       filters:
-        - round: 1
-
+        - round: 2
+        - throttle: 30s
 text_sensor:
   - platform: bme68x_bsec2
     iaq_accuracy:
@@ -250,7 +277,6 @@ zigbee:
               report: true
               value: 0
               device: target
-              lambda: !lambda "return x ? 1 : 0;" 
             - attribute_id: 0x0001
               type: ENUM8
               report: false
@@ -315,14 +341,6 @@ zigbee:
     - device_type: TEMPERATURE_SENSOR
       num: 3
       clusters:
-        - id: REL_HUMIDITY_MEASUREMENT
-          attributes:
-            - attribute_id: 0
-              device: humidity
-              type: UINT16
-              report: true
-              value: 100
-              scale: 100
         - id: TEMPERATURE_MEASUREMENT
           attributes:
             - attribute_id: 0x0
@@ -330,6 +348,14 @@ zigbee:
               report: true
               value: 100
               device: temperature
+              scale: 100
+        - id: REL_HUMIDITY_MEASUREMENT
+          attributes:
+            - attribute_id: 0
+              device: humidity
+              type: UINT16
+              report: true
+              value: 100
               scale: 100
         - id: PRESSURE_MEASUREMENT
           attributes:
@@ -381,8 +407,14 @@ zigbee:
             - attribute_id: 0
               type: bool
               on_value:
-                then:   
-                  - switch.turn_on: emode
+                then:
+                  - if:
+                      condition:
+                        lambda: 'return !x;' 
+                      then:
+                        - switch.turn_off: emode
+                      else:
+                        - switch.turn_on: emode
     - num: 5
       device_type: ON_OFF_OUTPUT
       clusters:
@@ -396,8 +428,14 @@ zigbee:
             - attribute_id: 0
               type: bool
               on_value:
-                then:   
-                  - switch.turn_on: bmode
+                then:
+                  - if:
+                      condition:
+                        lambda: 'return !x;' 
+                      then:
+                        - switch.turn_off: bmode
+                      else:
+                        - switch.turn_on: bmode
     - device_type: SIMPLE_SENSOR
       num: 6
       clusters:
