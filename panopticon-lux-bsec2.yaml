@@ -363,14 +363,11 @@ zigbee:
                   - lambda: |-  
                       int mode = (int)x;  
                       if (mode == 0) {  
-                        id(emode).turn_off();  
-                        id(bmode).turn_off();  
+                        id(bmode).turn_off();   
                       } else if (mode == 1) {  
-                        id(emode).turn_on();  
-                        id(bmode).turn_off();  
+                        id(bmode).turn_on();   
                       } else if (mode >= 2) {  
-                        id(emode).turn_on();  
-                        id(bmode).turn_on();  
+                        id(emode).turn_on();      
                       }      
     - num: 2
       device_type: COLOR_DIMMABLE_LIGHT
