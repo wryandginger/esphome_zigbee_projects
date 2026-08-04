@@ -4,16 +4,22 @@ These are projects that use the larger ESP32-C6 Dev Kit to make multi sensors.
 I call these panopticon devices in reference to [Jeremy Bentham](https://en.wikipedia.org/wiki/Jeremy_Bentham) and [Michel Foucault](https://en.wikipedia.org/wiki/Discipline_and_Punish).
 They literally watch multiple things, including you.  
 
-Note: This will work on ZHA, but is not working on Z2M without writing your own handler.
-This is also confirmed to NOT work with Hue, Sonoff, and Tuya gateways.
+<details>
+<summary>Here's an example of what you get in ZHA:</summary>
+<div align="center">
+   <img src="https://github.com/wryandginger/esphome_zigbee_projects/blob/main/samples/waveshare.png">
+  <p>Effect turns on the lighting effects. it goes from 0-8 with 0=OFF and 8 being the Alarm effect. Mode adjusts Bluetooth and Engineering Modes. 0=Everything Off 1=Bluetooth On 2=Engineering Mode On.</p>
+</div>
+  
+</details>
 
 ## Warning: These devices are chatty!
 This means they can send a lot of messages via your Zigbee network causing slowness/instability/crashing.
-Throttles have been added to limit the amount of network chatter, but you may need to remove Zigbee attributes to maintain stability on your setup. The PMS5003 and LD2410 modules (especially in Engineering Mode) are the worst offenders.
+Throttles have been added to limit the amount of network chatter, but you may need to remove Zigbee attributes to maintain stability on your setup. 
 
 # Troubleshooting Zigbee Network Crashing
 If your Zigbee network crashes, reports RF interference, or constantly re-initializes: 
-1. Disconnect all DIY/custom zigbee devices from power. 
+1. Disconnect all DIY/custom Zigbee devices from power. 
 2. Manually disable ZHA.
 3. Manually restart your Zigbee network coordinator and/or Home Assistant and wait 2-5 minutes.
 4. Re-enable ZHA and monitor logs.
@@ -27,7 +33,7 @@ Try turning on/off the bluetooth and engineering mode switches via Zigbee. This 
 
 If your LD2410B is still stuck, you need to force the device to restart the UART bus:
 1. Download HiLink's HLKRadarTool app
-2. Connect to the stuck sensor and verify that it is showing accrate sensor data in the HLKRadarTool app.
+2. Connect to the stuck sensor and verify that it is showing accurate sensor data in the HLKRadarTool app.
 3. Turn on Engineering Mode
 4. Go to "Settings"
 5. Change "Baud rate setting" to 9600
@@ -39,9 +45,9 @@ You will need
 * [ESP32-C6 Dev Kit](https://www.amazon.com/Waveshare-Microcontroller-Development-Single-Core-ESP32-C6-WROOM-1-N8/dp/B0CKR2LF83/) ~$11
 * [HLK-LD2410-B 20GhZ mmWave Sensor with cable](https://www.amazon.com/JESSINIE-HLK-LD2410B-P-Presence-Bluetooth-LD2410B/dp/B0C36FRVHR) ~$11
 * [PMS5003 Particulate Matter Sensor](https://www.amazon.com/BestParts-Digital-Particle-Concentration-PMS5003/dp/B0B1DQKV4N) ~$21
-* [BME 680 Temp, Humdidity, Pressure, and Gas Resistance Sensor with cable](https://www.amazon.com/dp/B0BZ4W6J49?ref=nb_sb_ss_w_as-reorder_k0_1_6&amp=&crid=53Z8SLZ0MUP6&sprefix=bme680&th=1) ~$18
+* [BME 680 Temp, Humidity, Pressure, and Gas Resistance Sensor with cable](https://www.amazon.com/dp/B0BZ4W6J49?ref=nb_sb_ss_w_as-reorder_k0_1_6&amp=&crid=53Z8SLZ0MUP6&sprefix=bme680&th=1) ~$18
 * [SSD1306 .96 in I2C display](https://www.amazon.com/Display-SSD1306-Self-Luminous-Compatible-Raspberry/dp/B0DY5DS8HK) ~$5/ea
-* DuPont cables and wago connectors  (or some electrical tape)
+* DuPont cables and Wago connectors  (or some electrical tape)
 * Use the PMSbox.stl and boxlid.stl to print a project box that hides everything neatly. (I recommend printing in Clear PLA)
 
 # For [panopticon-co2-bsec2.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/panopticon-co2-bsec2.yaml):
@@ -49,9 +55,9 @@ You will need
 * [ESP32-C6 Dev Kit](https://www.amazon.com/Waveshare-Microcontroller-Development-Single-Core-ESP32-C6-WROOM-1-N8/dp/B0CKR2LF83/) ~$11
 * [HLK-LD2410-B 20GhZ mmWave Sensor with cable](https://www.amazon.com/JESSINIE-HLK-LD2410B-P-Presence-Bluetooth-LD2410B/dp/B0C36FRVHR) ~$11
 * For CO2: [MHZ-19B/C](https://www.amazon.com/EC-Buying-Monitoring-Concentration-Detection/dp/B0CRKGP143) ~$25
-* [BME 680 Temp, Humdidity, Pressure, and Gas Resistance Sensor with cable](https://www.amazon.com/dp/B0BZ4W6J49?ref=nb_sb_ss_w_as-reorder_k0_1_6&amp=&crid=53Z8SLZ0MUP6&sprefix=bme680&th=1) ~$18
+* [BME 680 Temp, Humidity, Pressure, and Gas Resistance Sensor with cable](https://www.amazon.com/dp/B0BZ4W6J49?ref=nb_sb_ss_w_as-reorder_k0_1_6&amp=&crid=53Z8SLZ0MUP6&sprefix=bme680&th=1) ~$18
 * [SSD1306 .96 in I2C display](https://www.amazon.com/Display-SSD1306-Self-Luminous-Compatible-Raspberry/dp/B0DY5DS8HK) ~$5/ea
-* DuPont cables and wago connectors  (or some electrical tape)
+* DuPont cables and Wago connectors  (or some electrical tape)
 * Use the CO2box.stl and boxlid.stl to print a project box that hides everything neatly. (I recommend printing in Clear PLA)
 
 # For [panopticon-lux-bsec2.yaml](https://github.com/wryandginger/esphome_zigbee_projects/blob/main/panopticon-lux-bsec2.yaml):
@@ -60,19 +66,17 @@ You will need
 * [BH1750FVI Lux Sensor](https://www.amazon.com/dp/B0CQ2KBVRM) ~ $4
 * [HLK-LD2410-B 20GhZ mmWave Sensor with cable](https://www.amazon.com/JESSINIE-HLK-LD2410B-P-Presence-Bluetooth-LD2410B/dp/B0C36FRVHR) ~$11
 * [BME280](https://www.amazon.com/Pre-Soldered-Atmospheric-Temperature-GY-BME280-3-3-MicroControllers/dp/B0BQFV883T) ~$12 before tax and shipping.
-* DuPont cables and wago connectors  (or some electrical tape)
+* DuPont cables and Wago connectors  (or some electrical tape)
 * Just use the CO2box.stl, everything will fit.
-* I don't know if you really need to use a Lux sensor if you also have an LD2410 module, but they're cheap.
+* You don't really need to use a Lux sensor if you also have an LD2410 module, but they're cheap.
   
 # Bosch Sensortec Environmental Cluster 2 (BSEC2) - Copyright and Distribution Notice:
 These files use [Bosch's proprietary BSEC2 libary](https://github.com/boschsensortec/Bosch-BSEC2-Library). These offer IAQ/Air Quality and Sensor accuracy sensors in addition to Temperature, Humidity, Motion, etc.
-The IAQ and Accuracy sensors have been slightly altered from the config examples offered by ESPHome by converting these to percentages. This makes the zigbee configuration easier to program and allows you to graph the data.
-The display shows the standard AQI and accuracy text.
 
 Using/compiling these files is implicit acceptance of [Bosch's license agreement](https://www.bosch-sensortec.com/media/boschsensortec/downloads/software/bme688_development_software/2024_12/20241219_clickthrough_license_terms_bsec_bme680_bme688_bme690.pdf). ... tl;dr: 
 * Don't use this outside of consumer settings/contexts (no industrial/medical/safety-critical uses). 
 * You may sell a device with this library enabled in firmware, but you may not modify/disassemble/reverse-engineer Bosch's library.
-* Don't give/sell the config to any military or a hostle/embargoed country.
+* Don't give/sell the config to any military or a hostile/embargoed country.
 * This is not legal advice and I am not your lawyer, nor am I your geek squad.
 * Compile at your own risk.
 
@@ -84,7 +88,7 @@ Using/compiling these files is implicit acceptance of [Bosch's license agreement
 4. Connect the LD2410 with tx_pin: GPIO21 rx_pin: GPIO22 and out_pin: GPIO11
 5. Connect the PMS or CO2 sensor with  tx_pin: GPIO19 rx_pin: GPIO18 (and set_pin GPIO11 for the PMS)
 4. Plug a USB-C cable into the ESP32-C6 module.
-5. Prep your device in esphome. I usually just select ESP32-C6 and skip everything.
+5. Prep your device in ESPhome. I usually just select ESP32-C6 and skip everything.
 6. Replace the new YAML file with the desired config from this repo and build your project. Note: No WiFi or OTA are available so any flashing has to be done via USB. Press and hold the button as you plug in the USB cable if you need to get into the bootloader.
 
 Pro-Tip: You only need to keep one YAML file in ESPHome per device model/configuration that you're deploying on your network.
