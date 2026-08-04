@@ -1,5 +1,5 @@
 # Generic ESP32- H2-DEV-KIT-N4S router and light
-These are projects that use the low power ESP32-H2 Dev Kit to make a generic router and RGB light with a few light effects that can be used for notification.
+These are projects that use the low power ESP32-H2 Dev Kit to make a generic router and RGB light with a few light effects that can be used for notification. These have the older lighting configuration, take a look at the M5Stack lights if you need more effects.
 
 Note: This will work on ZHA, but is not working on Z2M without writing your own handler.
 This is also confirmed to NOT work with Hue, Sonoff, and Tuya gateways.
@@ -27,12 +27,12 @@ esp32:
   flash_size: 4MB
   framework:
     type: esp-idf
-    sdkconfig_options:
-      CONFIG_ESPTOOLPY_FLASHSIZE_4MB: y
   variant: esp32h2
 
+# As of 8/2026 Router can only reliably be used on the 1.x SDK.
+
 external_components:
-  - source: github://luar123/zigbee_esphome
+  - source: github://luar123/zigbee_esphome/tree/v1.x
     components: [zigbee]
 
 globals:
