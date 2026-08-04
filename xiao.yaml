@@ -16,7 +16,104 @@ light:
     num_leds: 1
     rgb_order: GRB
     chipset: ws2812
-
+    effects:
+      - flicker
+      - addressable_rainbow:
+           speed: 3
+           width: 100
+      - addressable_twinkle:
+          twinkle_probability: 35%
+          progress_interval: 6ms
+      - addressable_random_twinkle:
+          twinkle_probability: 35%
+          progress_interval: 6ms
+      - addressable_fireworks:
+          update_interval: 75ms
+          spark_probability: 40%
+          use_random_color: true
+          fade_out_rate: 74
+      - pulse:
+          name: "SPulse"
+          transition_length: 500ms
+          update_interval: 2s
+      - strobe:
+          name: "Alarm"
+          colors:
+            - state: true
+              brightness: 100%
+              red: 100%
+              green: 0%
+              blue: 0%
+              duration: 500ms
+            - state: false
+              duration: 150ms
+            - state: true
+              brightness: 100%
+              red: 0%
+              green: 0%
+              blue: 100%
+              duration: 500ms
+      - addressable_color_wipe:
+          name: "BlueGradient"
+          colors:
+            - red: 0%
+              green: 0%
+              blue: 100%  
+              num_leds: 10
+              gradient: true
+            - red: 0%
+              green: 100%
+              blue: 100%   
+              num_leds: 10
+              gradient: true
+            - red: 100%
+              green: 0%
+              blue: 100%   
+              num_leds: 15
+              gradient: true
+            - red: 0%
+              green: 100%
+              blue: 100%   
+              num_leds: 10
+              gradient: true
+            - red: 0%
+              green: 0%
+              blue: 60%   
+              num_leds: 2
+              gradient: true
+          add_led_interval: 250ms
+          reverse: true
+      - addressable_color_wipe:
+          name: "RedGradient"
+          colors:
+            - red: 100%
+              green: 91%
+              blue: 0%  
+              num_leds: 10
+              gradient: true
+            - red: 100%
+              green: 6%
+              blue: 18%   
+              num_leds: 10
+              gradient: true
+            - red: 100%
+              green: 63%
+              blue: 0%   
+              num_leds: 15
+              gradient: true
+            - red: 100%
+              green: 60%
+              blue: 18%   
+              num_leds: 10
+              gradient: true
+            - red: 100%
+              green: 0%
+              blue: 0%   
+              num_leds: 2
+              gradient: true
+          add_led_interval: 250ms
+          reverse: true
+          
 i2c:
   sda: GPIO22
   scl: GPIO23
@@ -39,6 +136,8 @@ binary_sensor:
     has_target:
       name: "Occupancy"
       id: sensor_occupancy
+      filters:
+        delayed_off: 45s
       on_press:   
         then:
           - zigbee.setAttr: { id: zb_occupancy, value: 1 }
@@ -53,22 +152,36 @@ sensor:
     id: illum_id
     name: "Illuminance"
     address: 0x23
-    update_interval: 45s
+    filters:
+        - round: 2
+        - throttle: 60s
   - platform: seeed_mr60bha2
     breath_rate:
       name: "Respiratory rate"
       id: respirate
+      filters:
+        - round: 2
+        - throttle: 60s
     heart_rate:
       name: "Heart rate"
       id: heart
+      filters:
+        - round: 2
+        - throttle: 60s
     distance:
       name: "Distance to Target"
       id: distance
+      filters:
+        - round: 2
+        - throttle: 60s
     num_targets:
       name: "Number of People Detected"
       id: people
-
-
+      filters:
+        - round: 0
+        - throttle: 45s
+        
+# Remember: You MUST downgrade to /tree/v1.x if you plan on turning on the router function of this device!
 external_components:
   - source: github://luar123/zigbee_esphome
     components: [zigbee]
@@ -85,7 +198,7 @@ globals:
 
 zigbee:
   id: "zb"
-  router: false
+  router: false   # Routing performance of the XIAO C6 module is abysmal. Keep this as an end_device!
   power_supply: 1
   endpoints:
     - device_type: SIMPLE_SENSOR
@@ -102,7 +215,7 @@ zigbee:
             - attribute_id: 0x0001
               type: ENUM8
               report: false
-              value: 0x01 #0x00 -> PIR; 0x01 -> sonic; 0x02 -> PIR & sonic
+              value: 0x01 # 0x00 -> PIR; 0x01 -> sonic; 0x02 -> PIR & sonic
         - id: ILLUMINANCE_MEASUREMENT
           attributes:
             - attribute_id: 0
@@ -176,6 +289,33 @@ zigbee:
                       red: !lambda "return zigbee::get_r_from_xy(id(color_x), id(color_y));"
                       green: !lambda "return zigbee::get_g_from_xy(id(color_x), id(color_y));"
                       blue: !lambda "return zigbee::get_b_from_xy(id(color_x), id(color_y));"
+        - id: ANALOG_OUTPUT  
+          attributes:  
+            - attribute_id: 0x001C  
+              type: STRING  
+              max_length: 6  
+              report: false  
+              value: Effect  
+            - attribute_id: 0x0055    # PresentValue  
+              type: SINGLE  
+              access: READ_WRITE  
+              value: 0  
+              on_value:  
+                then:  
+                  - if:  
+                      condition:  
+                        - lambda: 'return x == 0;'  
+                      then:  
+                        - light.turn_off: led_1  
+                      else:  
+                        - lambda: |-  
+                            static const char* effects[] = {  
+                              "None", "rainbow", "twinkle", "RedGradient",  
+                              "BlueGradient", "flicker", "fireworks", "SPulse", "Alarm"  
+                            };  
+                            auto call = id(led_1).turn_on();  
+                            call.set_effect(effects[(int)x]);  
+                            call.perform();
     - device_type: SIMPLE_SENSOR
       num: 3
       clusters:
