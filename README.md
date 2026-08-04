@@ -20,9 +20,9 @@ First, please practice gratitude; you have working sensors. If you're **really s
 
 ESPHome 2026.7+ and updates to the Zigbee external component switches to a newer Zigbee SDK (ZBOSS -> ESP Zigbee SDK 2.0). All of the configuration files had to change to accommodate this change. Presently, routers on SDK 2.0 produce significant network issues. To improve network stability, most non-motion sensors have a hard throttle of 60 seconds. As a result sensors have been rearranged, endpoints are a little different, and the partitions file is no longer required. You will probably need to change automations or purge sensor data if you update your configs
 
-**NOTE:** Even with these changes, SDK 2.0 creates a Zigbee black hole, causing most commercial devices to enter a panic mode. Sonoff, Gledopto, and Hue devices will rapidly disconnect and attempt to reconnect to the network. Over 3-4 hours the entire network collapses and/or ZHA stops listening to SDK 2.0 routers.
+**NOTE:** Even with these changes, SDK 2.0 creates a Zigbee black hole, causing most commercial devices to enter a panic mode. Sonoff, Gledopto, and Hue devices will rapidly disconnect and attempt to reconnect to the network. Over 3-4 hours the entire network collapses and/or ZHA stops listening to SDK 2.0 routers. You may switch between branches without much fuss.
 
-If you plan on making an **end device** (no routing), you are safe to use the SDK 2.0:
+If you plan on making an **end device** (no routing), then you are safe to use SDK 2.0:
 ```
 external_components:
   - source: github://luar123/zigbee_esphome
@@ -33,7 +33,7 @@ zigbee:
   router: false 
 ```
 
-If you **NEED routing**, you must use the 1.x branch as the SDK 2.0 creates a routing black hole :
+If you **NEED routing**, you must use the 1.x branch as the SDK 2.0 creates a routing black hole:
 
 ```
 external_components:
