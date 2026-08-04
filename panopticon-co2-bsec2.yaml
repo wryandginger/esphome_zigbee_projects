@@ -43,13 +43,104 @@ light:
     num_leds: 1
     chipset: WS2812
     rmt_symbols: 48
-    id: "led_1"
-    name: "Board LED"
-    icon: "mdi:led-outline"
+    id: "led_1"    
     effects:
-      - random:
-      - flicker:
+      - flicker
       - addressable_rainbow:
+           speed: 3
+           width: 100
+      - addressable_twinkle:
+          twinkle_probability: 35%
+          progress_interval: 6ms
+      - addressable_random_twinkle:
+          twinkle_probability: 35%
+          progress_interval: 6ms
+      - addressable_fireworks:
+          update_interval: 75ms
+          spark_probability: 40%
+          use_random_color: true
+          fade_out_rate: 74
+      - pulse:
+          name: "SPulse"
+          transition_length: 500ms
+          update_interval: 2s
+      - strobe:
+          name: "Alarm"
+          colors:
+            - state: true
+              brightness: 100%
+              red: 100%
+              green: 0%
+              blue: 0%
+              duration: 500ms
+            - state: false
+              duration: 150ms
+            - state: true
+              brightness: 100%
+              red: 0%
+              green: 0%
+              blue: 100%
+              duration: 500ms
+      - addressable_color_wipe:
+          name: "BlueGradient"
+          colors:
+            - red: 0%
+              green: 0%
+              blue: 100%  
+              num_leds: 10
+              gradient: true
+            - red: 0%
+              green: 100%
+              blue: 100%   
+              num_leds: 10
+              gradient: true
+            - red: 100%
+              green: 0%
+              blue: 100%   
+              num_leds: 15
+              gradient: true
+            - red: 0%
+              green: 100%
+              blue: 100%   
+              num_leds: 10
+              gradient: true
+            - red: 0%
+              green: 0%
+              blue: 60%   
+              num_leds: 2
+              gradient: true
+          add_led_interval: 250ms
+          reverse: true
+      - addressable_color_wipe:
+          name: "RedGradient"
+          colors:
+            - red: 100%
+              green: 91%
+              blue: 0%  
+              num_leds: 10
+              gradient: true
+            - red: 100%
+              green: 6%
+              blue: 18%   
+              num_leds: 10
+              gradient: true
+            - red: 100%
+              green: 63%
+              blue: 0%   
+              num_leds: 15
+              gradient: true
+            - red: 100%
+              green: 60%
+              blue: 18%   
+              num_leds: 10
+              gradient: true
+            - red: 100%
+              green: 0%
+              blue: 0%   
+              num_leds: 2
+              gradient: true
+          add_led_interval: 250ms
+          reverse: true
           
 binary_sensor:
   - platform: ld2410
@@ -64,12 +155,18 @@ binary_sensor:
         then:
           - zigbee.setAttr: { id: zb_occupancy, value: 0 }
           - zigbee.reportAttr: "zb_occupancy"
+      filters:
+        - delayed_off: 45s
     has_moving_target:
       name: Moving Target
       id: motion
+      filters:
+        - delayed_off: 45s
     has_still_target:
       name: Still Target
       id: starget
+      filters:
+        - delayed_off: 45s
   - platform: gpio
     pin:
       number: 9
@@ -91,106 +188,75 @@ sensor:
     name: Temperature_F
     id: temperature_f
     lambda: return id(temperature).state * 9/5+32;
-    accuracy_decimals: 2
     filters:
-        - round: 0
-        - throttle: 120s
-
+        - round: 2
+        - throttle: 60s
   - platform: bme68x_bsec2
     temperature:
       name: "BME680 Temperature"
       id: temperature
-      accuracy_decimals: 2
       filters:
-        - round: 0
-        - throttle: 120s
+        - round: 2
+        - throttle: 60s
     pressure:
       name: "BME680 Pressure"
       id: pressure
-      accuracy_decimals: 2
       filters:
         - round: 0
-        - throttle: 120s
     humidity:
       name: "BME680 Humidity"
       id: humidity
-      accuracy_decimals: 2
       filters:
-        - round: 0
-        - throttle: 120s
+        - round: 2
+        - throttle: 60s
     gas_resistance:
       name: "BME680 Gas Resistance"
       id: gasresist
-      accuracy_decimals: 2
       filters:
         - round: 0
-        - throttle: 120s
+        - throttle: 60s
     iaq:
       name: "BME680 IAQ"
       id: iaq
-      accuracy_decimals: 2
       filters:
         - round: 0
-        - throttle: 120s
     iaq_accuracy: 
       name: "BME680 IAQ Accuracy"
       id: iaqa
-      accuracy_decimals: 2
       filters:
         - round: 0
-        - throttle: 120s
-
+        - throttle: 60s
   - platform: mhz19
     id: mhz19s
     uart_id: co2_bus
     co2:
       name: MH-Z19 CO2 Value
       id: co2
-    temperature:
-      name: MH-Z19 Temperature
-      id: temp2
-      accuracy_decimals: 2
       filters:
         - round: 0
-        - throttle: 120s
-
+        - throttle: 60s
   - platform: ld2410
     light:
       name: light
       id: ldlux
-      accuracy_decimals: 2
       filters:
         - round: 0
         - throttle: 120s
-    moving_distance:
-      name: Moving Distance
-      id: mdistance 
-    still_distance:
-      name: Still Distance
-      id: sdistance 
-    moving_energy:
-      name: Move Energy
-      id: menergy
-    still_energy:
-      name: Still Energy
-      id: senergy
     detection_distance:
       name: Detection Distance
       id: ddistance
       accuracy_decimals: 0
       filters:
         - round: 0
-        - throttle: 30s
+        - throttle: 45s
 switch:
   - platform: ld2410
     engineering_mode:
       name: "engineering mode"
       id: emode
-      restore_mode: RESTORE_DEFAULT_OFF
     bluetooth:
       name: "control bluetooth"
       id: bmode
-      restore_mode: RESTORE_DEFAULT_OFF
 
 text_sensor:
   - platform: bme68x_bsec2
@@ -244,9 +310,10 @@ display:
       it.printf(0, 48, id(roboto_14), "%s",  id(accuracy).state.c_str());  
 
 external_components:
-  - source: github://luar123/zigbee_esphome
+  - source: github://luar123/zigbee_esphome/tree/v1.x
     components: [zigbee]
 
+    
 globals:
   - id: color_x
     type: float
@@ -259,7 +326,7 @@ globals:
 
 zigbee:
   id: "zb"
-  router: false
+  router: true
   endpoints:
     - device_type: SIMPLE_SENSOR
       num: 1
@@ -278,14 +345,6 @@ zigbee:
     - device_type: SIMPLE_SENSOR
       num: 2
       clusters:
-        - id: TEMPERATURE_MEASUREMENT
-          attributes:
-            - attribute_id: 0x0
-              type: UINT16
-              report: true
-              value: 100
-              device: temp2
-              scale: 100
         - id:  CARBON_DIOXIDE_MEASUREMENT
           attributes:
             - attribute_id: 0x0000
@@ -309,7 +368,8 @@ zigbee:
             - attribute_id: 0x0051
               type: bool
               value: false
-            - attribute_id: 0x0055
+            - id: targetdist
+              attribute_id: 0x0055
               type: single
               report: true
               value: 0
@@ -320,8 +380,30 @@ zigbee:
               report: false
             - attribute_id: 0x006F
               type: MAP8
-              value: 0
-              
+              value: 0  
+        - id: ANALOG_OUTPUT  
+          attributes:  
+            - attribute_id: 0x001C  
+              type: STRING  
+              max_length: 4  
+              report: false  
+              value: Mode  
+            - attribute_id: 0x0055    # PresentValue  
+              type: SINGLE  
+              access: READ_WRITE  
+              value: 0  
+              on_value:  
+                then:  
+                  - lambda: |-  
+                      int mode = (int)x;  
+                      if (mode == 0) {  
+                        id(bmode).turn_off();  
+                        id(emode).turn_off();  
+                      } else if (mode == 1) {  
+                        id(bmode).turn_on();   
+                      } else if (mode >= 2) {  
+                        id(emode).turn_on();      
+                      }   
     - num: 3
       device_type: COLOR_DIMMABLE_LIGHT
       clusters:
@@ -365,6 +447,33 @@ zigbee:
                       red: !lambda "return zigbee::get_r_from_xy(id(color_x), id(color_y));"
                       green: !lambda "return zigbee::get_g_from_xy(id(color_x), id(color_y));"
                       blue: !lambda "return zigbee::get_b_from_xy(id(color_x), id(color_y));"
+        - id: ANALOG_OUTPUT  
+          attributes:  
+            - attribute_id: 0x001C  
+              type: STRING  
+              max_length: 6  
+              report: false  
+              value: Effect  
+            - attribute_id: 0x0055    # PresentValue  
+              type: SINGLE  
+              access: READ_WRITE  
+              value: 0  
+              on_value:  
+                then:  
+                  - if:  
+                      condition:  
+                        - lambda: 'return x == 0;'  
+                      then:  
+                        - light.turn_off: led_1  
+                      else:  
+                        - lambda: |-  
+                            static const char* effects[] = {  
+                              "None", "rainbow", "twinkle", "RedGradient",  
+                              "BlueGradient", "flicker", "fireworks", "SPulse", "Alarm"  
+                            };  
+                            auto call = id(led_1).turn_on();  
+                            call.set_effect(effects[(int)x]);  
+                            call.perform();
     - device_type: SIMPLE_SENSOR
       num: 4
       clusters:
@@ -403,7 +512,7 @@ zigbee:
             - attribute_id: 0x0055
               type: bool
               device: motion
-              report: true   
+              report: true     
     - device_type: SIMPLE_SENSOR
       num: 5
       clusters:
@@ -465,52 +574,9 @@ zigbee:
             - attribute_id: 0x0055
               type: bool
               device: starget
-              report: true
-              
-    - num: 6
-      device_type: ON_OFF_OUTPUT
-      clusters:
-        - id: ON_OFF
-          attributes:
-            - attribute_id: 0x001C
-              type: STRING
-              max_length: 5
-              report: false
-              value: EMODE
-            - attribute_id: 0
-              type: bool
-              on_value:
-                then:
-                  - if:
-                      condition:
-                        lambda: 'return !x;'
-                      then:
-                        - switch.turn_off: emode
-                      else:
-                        - switch.turn_on: emode
-    - num: 7
-      device_type: ON_OFF_OUTPUT
-      clusters:
-        - id: ON_OFF
-          attributes:
-            - attribute_id: 0x001C
-              type: STRING
-              max_length: 5
-              report: false
-              value: BMODE
-            - attribute_id: 0
-              type: bool
-              on_value:
-                then:
-                  - if:
-                      condition:
-                        lambda: 'return !x;'
-                      then:
-                        - switch.turn_off: bmode
-                      else:
-                        - switch.turn_on: bmode
+              report: true              
     - device_type: SIMPLE_SENSOR
-      num: 8
+      num: 6
       clusters:
         - id: ILLUMINANCE_MEASUREMENT
           attributes:
@@ -541,18 +607,4 @@ zigbee:
               report: false
             - attribute_id: 0x006F
               type: MAP8
-              value: 0     
-        - id: BINARY_INPUT
-          attributes: 
-            - attribute_id: 0x001C
-              type: STRING
-              max_length: 6
-              report: false
-              value: Target
-            - attribute_id: 0x0051
-              type: bool
-              value: true
-            - attribute_id: 0x0055
-              type: bool
-              device: target
-              report: true
+              value: 0   
