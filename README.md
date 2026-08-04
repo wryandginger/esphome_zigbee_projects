@@ -1,10 +1,7 @@
 # Zigbee ESPHome Projects
 This Repo Contains ESPHome YAML configurations and other files that might be useful in building Zigbee devices using ESPHome 2026.7.3+
 
-
-# 🚨 Breaking Changes:
-This is NOT backwards compatible with older versions of ESPHome
-As of 7/29/2026, these **ONLY** compile on ESPHome 2026.7.3, you must use this version or newer.
+As of 8/4/2026, these **ONLY** compile on ESPHome 2026.7.3, you must use this version or newer. This is **NOT** backwards compatible with older versions of ESPHome.
 
 ## 🆕 Starting from scratch? 
 If you don't have any sensors built yet, feel free to follow these guides. 
@@ -12,16 +9,41 @@ If you don't have any sensors built yet, feel free to follow these guides.
 If you have some experience with ESPHome, you might want to just jump to luar123's [zigbee_esphome external component.](https://github.com/luar123/zigbee_esphome) and use the basic mode.
 
 ## ❓ Planning to update? 
+<details>
+<summary>Click to expand</summary>
+  
 If you have already compiled an older version and your devices are working: 
 
 ### ⚠️ Proceed with Caution!
+
 First, please practice gratitude; you have working sensors. If you're **really sure** you want to risk not having working sensors, then proceed. (This is totally a note for myself 🤦‍♂️).
 
-ESPHome 2026.7+ and updates to the Zigbee external component switches to a newer Zigbee SDK (ZBOSS -> ESP Zigbee SDK 2.0). All of the configuration files had to change to accommodate this change. To improve network stability, most non-motion sensors have a hard throttle of 120 seconds.
+ESPHome 2026.7+ and updates to the Zigbee external component switches to a newer Zigbee SDK (ZBOSS -> ESP Zigbee SDK 2.0). All of the configuration files had to change to accommodate this change. Presently, routers on SDK 2.0 produce significant network issues. To improve network stability, most non-motion sensors have a hard throttle of 60 seconds. As a result sensors have been rearranged, endpoints are a little different, and the partitions file is no longer required. You will probably need to change automations or purge sensor data if you update your configs
 
-This means sensors have been rearranged, endpoints are a little different, and the partitions file is no longer required. You will probably need to change automations or purge sensor data.
+**NOTE:** Even with these changes, SDK 2.0 creates a Zigbee black hole, causing most commercial devices to enter a panic mode. Sonoff, Gledopto, and Hue devices will rapidly disconnect and attempt to reconnect to the network. Over 3-4 hours the entire network collapses and/or ZHA stops listening to SDK 2.0 routers.
 
-I have only been testing these configurations for a few hours. There may be stability issues. Flash at your own risk.
+If you plan on making an **end device** (no routing), you are safe to use the SDK 2.0:
+```
+external_components:
+  - source: github://luar123/zigbee_esphome
+    components: [zigbee]
+
+zigbee:
+  id: "zb"
+  router: false 
+```
+
+If you **NEED routing**, you must use the 1.x branch as the SDK 2.0 creates a routing black hole :
+
+```
+external_components:
+  - source: github://luar123/zigbee_esphome/tree/v1.x
+    components: [zigbee]
+
+zigbee:
+  id: "zb"
+  router: true
+```
 
 # Friendly Reminder:
 Be warned, ESPHome will **ALWAYS** break non-standard/custom integrations on a new version.
@@ -41,6 +63,8 @@ For example, ESPHome 2026.2 improves system resource usage and system event proc
 2. Fully ERASE the device's flash memory by using the [ESP Tool](https://espressif.github.io/esptool-js/) before you
 3. Update your device's firmware and
 4. ALWAYS delete and re-pair any device you update.
+
+</details>
 
 # Acknowledgements:
 This is made possible by the hard work of @luar123  for the [zigbee_esphome external component.](https://github.com/luar123/zigbee_esphome)
