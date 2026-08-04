@@ -9,6 +9,13 @@ This is also confirmed to NOT work with Hue, Sonoff, and Tuya gateways.
 You will need
 * [XIAO MR60BHA2](https://www.amazon.com/dp/B0F3CCM5P6?ref=ppx_yo2ov_dt_b_fed_asin_title) ~$26 plus tax and shipping
 * that's it!
+<details>
+<summary>Here's what you get in ZHA:</summary>
+<div align="center">
+   <img src="https://github.com/wryandginger/esphome_zigbee_projects/blob/main/samples/xiao.png">
+</div>
+</details>
+
 
 # Install Instructions
 1. Remove the 3d printed back cover.
